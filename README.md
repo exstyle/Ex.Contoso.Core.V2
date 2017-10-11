@@ -1,0 +1,1 @@
+# Ex.Contoso.Core.V2
