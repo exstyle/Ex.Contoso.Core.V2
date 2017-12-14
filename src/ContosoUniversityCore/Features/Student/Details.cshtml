@@ -59,7 +59,16 @@
         </dd>
     </dl>
 </div>
+<div><canvas id="lineChart"></canvas></div>
+@{ChartJSCore.Models.Chart chart = (ChartJSCore.Models.Chart)Model.chartNote;}
 <p>
     @Html.ActionLink("Edit", nameof(StudentController.Edit), new Edit.Query { Id = Model.ID }) |
     @Html.ActionLink("Back to List", nameof(StudentController.Index))
 </p>
+
+@section Scripts {
+    <script src="~/lib/Chart.js/dist/Chart.js"></script>
+    <script>
+        @Html.Raw(chart.CreateChartCode("lineChart"));
+    </script>
+}

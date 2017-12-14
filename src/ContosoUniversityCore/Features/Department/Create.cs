@@ -19,6 +19,7 @@
                 RuleFor(m => m.Budget).NotNull();
                 RuleFor(m => m.StartDate).NotNull();
                 RuleFor(m => m.Administrator).NotNull();
+                
             }
         }
 

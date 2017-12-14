@@ -20,8 +20,8 @@
             public decimal Budget { get; set; }
 
             public DateTime StartDate { get; set; }
-
-            public int DepartmentID { get; set; }
+            
+            public string Test { get; set; }
 
             [Display(Name = "Administrator")]
             public string AdministratorFullName { get; set; }
