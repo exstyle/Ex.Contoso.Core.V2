@@ -7,6 +7,8 @@
     using Domain;
     using Infrastructure;
     using MediatR;
+    using CSharp.Test.TableauApi;
+    using Microsoft.AspNetCore.Html;
 
     public class Index
     {
@@ -19,6 +21,8 @@
         {
             public Department SelectedDepartment { get; set; }
             public List<Course> Courses { get; set; }
+
+            public HtmlString TableauSynthese { get; set; }
 
             public class Course
             {
@@ -47,10 +51,13 @@
                     .OrderBy(d => d.Id)
                     .ProjectToListAsync<Result.Course>();
 
+                var tableauS = new DateManager();
+                var test = tableauS.Tableau;
                 return new Result
                 {
                     Courses = courses,
-                    SelectedDepartment = message.SelectedDepartment
+                    SelectedDepartment = message.SelectedDepartment,
+                    TableauSynthese = new HtmlString(test.ToHtml())
                 };
             }
         }

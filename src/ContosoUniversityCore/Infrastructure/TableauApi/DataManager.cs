@@ -4,6 +4,8 @@ using System.Text;
 using System.Linq;
 using System.Resources;
 using CSharp.Test.TableauApi.Models;
+using ContosoUniversityCore.Infrastructure.TableauApi;
+using ContosoUniversityCore.Infrastructure.TableauApi.Models.Enums;
 
 namespace CSharp.Test.TableauApi
 {
@@ -12,7 +14,6 @@ namespace CSharp.Test.TableauApi
         public static void Run()
         {
             DateManager ma = new DateManager();
-            var re = ma.LoadResults();
         }
 
     }
@@ -24,20 +25,23 @@ namespace CSharp.Test.TableauApi
 
         public DateManager()
         {
-            Tableau.AddColonne(TableauRes.Tableau1ColonneTotal).AddColonneStyle("background:yellow");
-            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz);
+            Tableau.Title = "Super tableau";
+            Tableau.Symbole = "µ";
+            Tableau.AddColonne();
+            Tableau.AddColonne(TableauRes.Tableau1ColonneTotal).AddColonneClass("background:yellow");
+            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz).AddColonneClass("danger");
             Tableau.AddColonne(TableauRes.Tableau1ColonneElec);
             Tableau.AddColonne(TableauRes.Tableau1ColonneAutre);
             Tableau.AddColonne(TableauRes.Tableau1ColonneTeleReleve);
             Tableau.AddColonne(TableauRes.Tableau1ColonneProfile);
 
-            Tableau.AddLigne(TableauRes.LMargeBrute).
-                AddChildLigne(TableauRes.LMargeBruteSem1).AddLigneStyle("background:red").
-                AddLigne(TableauRes.LMargeBruteSem2).AddLigneStyle("background:red").
-                AddLigne(TableauRes.LMargeBruteSem3).AddLigneStyle("background:red");
+            Tableau.AddLigne(TableauRes.LMargeBrute).Symbole("€").DefaultValue(100).
+                AddChildLigne(TableauRes.LMargeBruteSem1).AddLigneClass("success").Symbole("$").DefaultValue(130).
+                AddLigne(TableauRes.LMargeBruteSem2).
+                AddLigne(TableauRes.LMargeBruteSem3);
 
-            Tableau.AddLigne(TableauRes.LMargeBruteSansTacite).AddLigneStyle("SuperStyle");
-            Tableau.AddLigne(TableauRes.LMargeExtreme)
+            Tableau.AddLigne(TableauRes.LMargeBruteSansTacite).AddLigneClass("SuperStyle");
+            Tableau.AddLigne(TableauRes.LMargeExtreme).Symbole("€").Format(EnumFormat.Marge).AddLigneClass("warning")
                 .AddChildLigne(TableauRes.LMargeExtremeSem1)
                 .AddLigne(TableauRes.LMargeExtremeSem2)
                 .AddLigne(TableauRes.LMargeExtremeSem3)
@@ -46,41 +50,31 @@ namespace CSharp.Test.TableauApi
                 .AddLigne(TableauRes.LMargeExtremeSem6)
                     .AddChildLigne(TableauRes.LMargeExtremeSem6Lundi);
 
+            Tableau.Generate();
+            GetResultats1();
         }
-
-        public List<TableauValeur> GetResultats()
+        
+        public void GetResultats1()
         {
             List<TableauValeur> results = new List<TableauValeur>();
 
-            List<Tuple<string, double>> query = new List<Tuple<string, double>>() {
-                                        { new Tuple<string, double>("Marge brute 2017", 2010) },
-                                        { new Tuple<string, double>("Marge brute sans tacite 2017", 2015) },
-                                        { new Tuple<string, double>("Marge extrême sur année 2017", 2020) }};
+            List<Tuple<string, double, double, double, double, double>> query = new List<Tuple<string, double, double, double, double, double>>() {
+                                        { new Tuple<string, double,double, double, double, double>("Marge brute 2017", 1,2,3,4,5) },
+                                        { new Tuple<string, double, double, double, double,double>("Marge brute sans tacite 2017", 1001,1002,1003,1004,1005.002) },
+                                        { new Tuple<string, double, double, double, double,double>("Marge extrême sur année 2017", 2001,2002,2003,2004,2005) }};
+
+            Dictionary<string, TableauValeur> test = new Dictionary<string, TableauValeur>();
 
             foreach (var item in query)
             {
-                results.Add(new TableauValeur()
-                {
-                    Colonne = Tableau.Colonne(TableauRes.Tableau1ColonneTotal),
-                    Ligne = Tableau.Ligne(item.Item1),
-                    Value = item.Item2
-                });
-
-                results.Add(new TableauValeur()
-                {
-                    Colonne = Tableau.Colonne(TableauRes.Tableau1ColonneGaz),
-                    Ligne = Tableau.Ligne(item.Item1),
-                    Value = item.Item2 - 1000
-                });
+                test.AddValue(  Tableau,
+                                Tableau.Colonne(TableauRes.Tableau1ColonneTotal),
+                                Tableau.Ligne(item.Item1),
+                                item.Item2);
             }
 
-            return results;
+            Tableau.Values = Tableau.Values.Concat(test).ToDictionary(x => x.Key, y=>  y.Value);
         }
         
-        public Tableau LoadResults()
-        {
-            Tableau.Values = GetResultats();
-            return Tableau;
-        }
     }
 }

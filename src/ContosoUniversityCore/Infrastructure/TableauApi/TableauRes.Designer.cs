@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CSharp.Test.TableauApi {
+namespace ContosoUniversityCore.Infrastructure.TableauApi {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CSharp.Test.TableauApi {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CSharp.Test.TableauApi.TableauRes", typeof(TableauRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ContosoUniversityCore.Infrastructure.TableauApi.TableauRes", typeof(TableauRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
