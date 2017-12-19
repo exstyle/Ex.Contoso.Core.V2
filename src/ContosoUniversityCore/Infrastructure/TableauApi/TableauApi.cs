@@ -9,20 +9,7 @@ namespace CSharp.Test.TableauApi
 {
     public static class TableauApi
     {
-        public static Colonne Colonne(this Tableau tableau, string name, int position = 0)
-        {
-            try
-            {
-                return tableau.Colonnes.Where(x => x.NomColonne == name).Skip(position).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-
-        }
-
+        #region < Ligne >
         public static Ligne Ligne(this Tableau tableau, string name, int position = 0)
         {
             try
@@ -34,19 +21,6 @@ namespace CSharp.Test.TableauApi
 
                 throw;
             }
-
-        }
-
-        public static Colonne AddColonne(this Tableau tableau, string colonne = "")
-        {
-            Colonne currentColonne = colonne.ToCol();
-            if (tableau.Colonnes == null)
-                tableau.Colonnes = new List<Colonne>();
-
-            currentColonne.Position = tableau.Colonnes.Count;
-            tableau.Colonnes.Add(currentColonne);
-
-            return currentColonne;
 
         }
 
@@ -99,10 +73,10 @@ namespace CSharp.Test.TableauApi
             ligne.Tableau.Lignes.Add(currentLigne);
 
             return currentLigne;
-
+            
         }
 
-        public static Ligne DefaultValue(this Ligne ligne, double value)
+        public static Ligne DefaultValue(this Ligne ligne, string value)
         {
             ligne.DefaultValue = value;
 
@@ -121,9 +95,16 @@ namespace CSharp.Test.TableauApi
             return ligne;
         }
 
-        public static Colonne ToCol(this string name)
+        public static Ligne AddLigneClass(this Ligne ligne, string style)
         {
-            return new Colonne(name);
+            ligne.LigneClass = style;
+            return ligne;
+        }
+
+        public static Ligne AddLigneCellulesClass(this Ligne ligne, string style)
+        {
+            ligne.LigneCelluleClass = style;
+            return ligne;
         }
 
         public static Ligne ToLigne(this string name)
@@ -131,17 +112,56 @@ namespace CSharp.Test.TableauApi
             return new Ligne(name);
         }
 
-        public static void AddColonneClass(this Colonne colonne, string style)
+        #endregion
+
+        #region < Colonne >
+        
+        public static Colonne ToCol(this string name)
         {
-            colonne.Style = style;
+            return new Colonne(name);
         }
 
-        public static Ligne AddLigneClass(this Ligne ligne, string style)
+        public static Colonne AddColonneClass(this Colonne colonne, string style)
         {
-            ligne.Class = style;
-            return ligne;
+            colonne.ColonneClass = style;
+            return colonne;
         }
 
+        public static Colonne AddColonneCellulesClass(this Colonne colonne, string style)
+        {
+            colonne.ColonneCelluleClass = style;
+            return colonne;
+        }
+
+        public static Colonne Colonne(this Tableau tableau, string name, int position = 0)
+        {
+            try
+            {
+                return tableau.Colonnes.Where(x => x.NomColonne == name).Skip(position).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+        
+        public static Colonne AddColonne(this Tableau tableau, string colonne = "")
+        {
+            Colonne currentColonne = colonne.ToCol();
+            if (tableau.Colonnes == null)
+                tableau.Colonnes = new List<Colonne>();
+
+            currentColonne.Position = tableau.Colonnes.Count;
+            tableau.Colonnes.Add(currentColonne);
+
+            return currentColonne;
+
+        }
+
+        #endregion
+        
         /// <summary>
         ///  Gérer les valeurs par défaut ici
         /// </summary>
@@ -149,28 +169,45 @@ namespace CSharp.Test.TableauApi
         public static void Generate(this Tableau tableau)
         {
             tableau.Values = new Dictionary<string, TableauValeur>();
-            foreach (Colonne col in tableau.Colonnes.Skip(1))
+            foreach (Colonne colonne in tableau.Colonnes.Skip(1))
             {
                 foreach (Ligne ligne in tableau.Lignes)
                 {
+                    var currentCellule = new TableauKeys(colonne.Position, ligne.Position).ToString();
+                    
+                    // Default Value
+                    if ((ligne.DefaultValue == null) && (!string.IsNullOrEmpty(tableau.DefaultValue)))
+                        ligne.DefaultValue = tableau.DefaultValue;
+
                     // Symbole ligne
                     if (string.IsNullOrEmpty(ligne.Symbole) && !String.IsNullOrEmpty(tableau.Symbole))
                         ligne.Symbole = tableau.Symbole;
-
+                    
                     // Enum Format
                     if (ligne.Format == null && tableau.Format != null)
                         ligne.Format = tableau.Format;
+                    
+                    tableau.Values[currentCellule] = new TableauValeur(colonne, ligne)
+                    {
+                        Symbole = ligne.Symbole,
+                        Format = ligne.Format,
+                        DefaultValue = ligne.DefaultValue,
+                        CelluleClass = string.Concat(ligne.LigneCelluleClass, colonne.ColonneCelluleClass)
+                    };
 
-                    tableau.Values.Add(new TableauKeys(col.Position, ligne.Position).ToString(), new TableauValeur(col, ligne, ligne.DefaultValue));
                 }
             }
 
         }
-
+        
         public static void AddValue(this Tableau tab, Colonne colonne, Ligne ligne, double value)
         {
             tab.Values[new TableauKeys(colonne.Position, ligne.Position).ToString()] = new TableauValeur(colonne, ligne, value);
-            //tab.Values.Add(new TableauKeys(colonne.Position, ligne.Position), value);
+        }
+
+        public static void AddValue(this Dictionary<string, TableauValeur> dictionary, Tableau tab, TableauValeur valeur)
+        {
+            tab.Values[new TableauKeys(valeur.Colonne.Position, valeur.Ligne.Position).ToString()] = valeur;
         }
 
         public static void AddValue(this Dictionary<string, TableauValeur> dictionary, Tableau tableau, Colonne colonne, Ligne ligne, double value)
@@ -189,25 +226,26 @@ namespace CSharp.Test.TableauApi
             tableauHtml += $"<thead>";
             tableauHtml += $"<tr>";
             tableau.Colonnes.ForEach(x =>
-                tableauHtml += $"<th>{x.NomColonne}</th>"
+                tableauHtml += $"<th class=\"{x.ColonneClass}\">{x.NomColonne}</th>"
             );
+
             tableauHtml += $"</tr>";
             tableauHtml += $"</thead>";
             tableauHtml += $"<tbody>";
             tableau.Lignes.ForEach(x =>
                 {
-                    tableauHtml += $"<tr class=\"{x.Class}\"><td>{x.NomLigne}</td>";
+                    tableauHtml += $"<tr class=\"{x.LigneClass}\"><td>{x.NomLigne}</td>";
                     tableau.Values.Where(y => y.Key.EndsWith($"-{x.Position}")).ToList().ForEach(z =>
                         {
-                            tableauHtml += $"<td class=\"{z.Value.Colonne.Style}\">";
-
-                            if (x.Format == null)
+                            tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
+                            
+                            if (z.Value.Format == null && z.Value.Value.ToString() != "")
                             { 
                                 tableauHtml += $"{z.Value.Value}";
-                                tableauHtml += $" {x.Symbole}</td>";
+                                tableauHtml += $" {z.Value.Symbole}</td>";
                             }
 
-                            if (x.Format == EnumFormat.Marge)
+                            if (z.Value.Format == EnumFormat.Marge)
                                 tableauHtml += $"{z.Value.Value:C}";
                         }
                         );

@@ -15,6 +15,8 @@ namespace CSharp.Test.TableauApi.Models
 
         public int Position { get; set; }
 
-        public string Style { get; set; }
+        public string ColonneClass { get; set; }
+
+        public string ColonneCelluleClass { get; set; }
     }
 }

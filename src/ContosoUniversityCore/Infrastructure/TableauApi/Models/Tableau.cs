@@ -7,21 +7,27 @@ namespace CSharp.Test.TableauApi.Models
 {
     public class Tableau
     {
+        // Objets
         public List<Ligne> Lignes { get; set; }
 
         public List<Colonne> Colonnes { get; set; }
         
         public Dictionary<string,TableauValeur> Values { get; set; }
 
+        // Mise en forme et propriétés
+        public string TClass { get; set; }
+
         public string THeadClass { get; set; }
 
         public string TBodyClass { get; set; }
-
+        
         public string Title { get; set; }
 
         public string Symbole { get; set; }
 
         public EnumFormat? Format { get; set; }
+
+        public string DefaultValue { get; set; }
     }
     
     public class TableauKeys

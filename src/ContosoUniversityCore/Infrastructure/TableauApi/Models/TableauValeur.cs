@@ -7,7 +7,18 @@ namespace CSharp.Test.TableauApi.Models
 {
     public class TableauValeur
     {
-        public TableauValeur(Colonne colonne, Ligne ligne, Double value)
+        public TableauValeur()
+        {
+
+        }
+
+        public TableauValeur(Colonne colonne, Ligne ligne)
+        {
+            Colonne = colonne;
+            Ligne = ligne;
+        }
+
+        public TableauValeur(Colonne colonne, Ligne ligne, double? value)
         {
             Colonne = colonne;
             Ligne = ligne;
@@ -18,10 +29,15 @@ namespace CSharp.Test.TableauApi.Models
 
         public Ligne Ligne { get; set; }
 
-        public double Value { get; set; }
+        public double? Value { get; set; }
 
-        public string DefaultValue { get; set; }
+        public string DefaultValue { get; set; } = "";
+
+        public string CelluleClass { get; set; }
+
+        public string Symbole { get; set; }
 
         public EnumFormat? Format { get; set; }
+
     }
 }

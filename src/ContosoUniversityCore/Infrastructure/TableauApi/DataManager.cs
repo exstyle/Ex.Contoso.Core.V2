@@ -26,17 +26,16 @@ namespace CSharp.Test.TableauApi
         public DateManager()
         {
             Tableau.Title = "Super tableau";
-            Tableau.Symbole = "µ";
             Tableau.AddColonne();
             Tableau.AddColonne(TableauRes.Tableau1ColonneTotal).AddColonneClass("background:yellow");
-            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz).AddColonneClass("danger");
+            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz).AddColonneClass("danger").AddColonneCellulesClass("danger");
             Tableau.AddColonne(TableauRes.Tableau1ColonneElec);
             Tableau.AddColonne(TableauRes.Tableau1ColonneAutre);
             Tableau.AddColonne(TableauRes.Tableau1ColonneTeleReleve);
             Tableau.AddColonne(TableauRes.Tableau1ColonneProfile);
 
-            Tableau.AddLigne(TableauRes.LMargeBrute).Symbole("€").DefaultValue(100).
-                AddChildLigne(TableauRes.LMargeBruteSem1).AddLigneClass("success").Symbole("$").DefaultValue(130).
+            Tableau.AddLigne(TableauRes.LMargeBrute).Symbole("€").DefaultValue("100").
+                AddChildLigne(TableauRes.LMargeBruteSem1).AddLigneClass("success").Symbole("$").DefaultValue("130").
                 AddLigne(TableauRes.LMargeBruteSem2).
                 AddLigne(TableauRes.LMargeBruteSem3);
 
@@ -67,10 +66,29 @@ namespace CSharp.Test.TableauApi
 
             foreach (var item in query)
             {
-                test.AddValue(  Tableau,
-                                Tableau.Colonne(TableauRes.Tableau1ColonneTotal),
-                                Tableau.Ligne(item.Item1),
-                                item.Item2);
+                // Syntaxe simple
+                test.AddValue(Tableau, new TableauValeur(Tableau.Colonne(TableauRes.Tableau1ColonneElec), Tableau.Ligne(item.Item1), item.Item2));
+
+                // Syntaxe avec constructeur et détail
+                test.AddValue(Tableau,
+                                new TableauValeur(Tableau.Colonne(TableauRes.Tableau1ColonneTotal), Tableau.Ligne(item.Item1), item.Item2)
+                                {
+                                    DefaultValue = "0",
+                                    CelluleClass = "warning",
+                                    Format = EnumFormat.Marge,
+                                });
+
+                // Syntaxe complexe -- Ne garanti pas le minimum pour faire fonctionner le tableau
+                test.AddValue(Tableau,
+                                new TableauValeur()
+                                {
+                                    Colonne = Tableau.Colonne(TableauRes.Tableau1ColonneGaz),
+                                    Ligne = Tableau.Ligne(item.Item1),
+                                    Value = item.Item2,
+                                    DefaultValue = "0",
+                                    CelluleClass = "success",
+                                    Format = EnumFormat.Marge,
+                                });
             }
 
             Tableau.Values = Tableau.Values.Concat(test).ToDictionary(x => x.Key, y=>  y.Value);
