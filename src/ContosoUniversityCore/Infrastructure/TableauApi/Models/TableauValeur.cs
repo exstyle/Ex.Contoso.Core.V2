@@ -31,6 +31,8 @@ namespace CSharp.Test.TableauApi.Models
 
         public double? Value { get; set; }
 
+        public string ValueString { get; set; }
+
         public string DefaultValue { get; set; } = "";
 
         public string CelluleClass { get; set; }

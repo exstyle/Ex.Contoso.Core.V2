@@ -161,7 +161,47 @@ namespace CSharp.Test.TableauApi
         }
 
         #endregion
-        
+
+        #region < Values >
+
+        public static TableauValeur Value (this Tableau tableau, string colonneName, string ligneName)
+        {
+            Colonne colonne = tableau.Colonne(colonneName);
+            Ligne ligne = tableau.Ligne(ligneName);
+            return tableau.Values.Where(x => x.Key == $"{colonne.Position}-{ligne.Position}").Single().Value;
+        }
+
+        public static TableauValeur SetFormat(this TableauValeur tableauValeur, EnumFormat format)
+        {
+            tableauValeur.Format = format;
+            return tableauValeur;
+        }
+
+        public static TableauValeur SetValeur(this TableauValeur tableauValeur, double value)
+        {
+            tableauValeur.Value = value;
+            return tableauValeur;
+        }
+
+        public static TableauValeur SetSymbole(this TableauValeur tableauValeur, string symbole)
+        {
+            tableauValeur.Symbole = symbole;
+            return tableauValeur;
+        }
+
+        public static TableauValeur SetCelluleClass (this TableauValeur tableauValeur, string style)
+        {
+            tableauValeur.CelluleClass = style;
+            return tableauValeur;
+        }
+
+        #endregion  
+
+        public static IEnumerable<TableauValeur> TableauValeur(this Tableau tableau, Colonne colonne, Ligne ligne)
+        {
+            return tableau.Values.Where(x => x.Key == $"{colonne.Position}-{ligne.Position}").Select(z => z.Value);
+        }
+
         /// <summary>
         ///  Gérer les valeurs par défaut ici
         /// </summary>
@@ -238,15 +278,19 @@ namespace CSharp.Test.TableauApi
                     tableau.Values.Where(y => y.Key.EndsWith($"-{x.Position}")).ToList().ForEach(z =>
                         {
                             tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
-                            
+
+                            if (z.Value.Value == null)
+                                z.Value.ValueString = z.Value.DefaultValue;
+                            else z.Value.ValueString = z.Value.Value.ToString();
+
                             if (z.Value.Format == null && z.Value.Value.ToString() != "")
                             { 
-                                tableauHtml += $"{z.Value.Value}";
+                                tableauHtml += $"{z.Value.ValueString}";
                                 tableauHtml += $" {z.Value.Symbole}</td>";
                             }
 
                             if (z.Value.Format == EnumFormat.Marge)
-                                tableauHtml += $"{z.Value.Value:C}";
+                                tableauHtml += $"{z.Value.ValueString:C}";
                         }
                         );
 

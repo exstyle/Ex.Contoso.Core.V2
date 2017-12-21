@@ -26,21 +26,24 @@ namespace CSharp.Test.TableauApi
         public DateManager()
         {
             Tableau.Title = "Super tableau";
+            Tableau.Symbole = "$";
+            Tableau.Format = EnumFormat.Marge;
+            Tableau.DefaultValue = "-";
             Tableau.AddColonne();
-            Tableau.AddColonne(TableauRes.Tableau1ColonneTotal).AddColonneClass("background:yellow");
-            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz).AddColonneClass("danger").AddColonneCellulesClass("danger");
+            Tableau.AddColonne(TableauRes.Tableau1ColonneTotal);
+            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz).AddColonneCellulesClass("danger");
             Tableau.AddColonne(TableauRes.Tableau1ColonneElec);
             Tableau.AddColonne(TableauRes.Tableau1ColonneAutre);
             Tableau.AddColonne(TableauRes.Tableau1ColonneTeleReleve);
             Tableau.AddColonne(TableauRes.Tableau1ColonneProfile);
 
-            Tableau.AddLigne(TableauRes.LMargeBrute).Symbole("€").DefaultValue("100").
-                AddChildLigne(TableauRes.LMargeBruteSem1).AddLigneClass("success").Symbole("$").DefaultValue("130").
+            Tableau.AddLigne(TableauRes.LMargeBrute).DefaultValue("100").
+                AddChildLigne(TableauRes.LMargeBruteSem1).DefaultValue("130").
                 AddLigne(TableauRes.LMargeBruteSem2).
                 AddLigne(TableauRes.LMargeBruteSem3);
 
-            Tableau.AddLigne(TableauRes.LMargeBruteSansTacite).AddLigneClass("SuperStyle");
-            Tableau.AddLigne(TableauRes.LMargeExtreme).Symbole("€").Format(EnumFormat.Marge).AddLigneClass("warning")
+            Tableau.AddLigne(TableauRes.LMargeBruteSansTacite);
+            Tableau.AddLigne(TableauRes.LMargeExtreme).AddLigneClass("warning")
                 .AddChildLigne(TableauRes.LMargeExtremeSem1)
                 .AddLigne(TableauRes.LMargeExtremeSem2)
                 .AddLigne(TableauRes.LMargeExtremeSem3)
@@ -66,32 +69,13 @@ namespace CSharp.Test.TableauApi
 
             foreach (var item in query)
             {
-                // Syntaxe simple
-                test.AddValue(Tableau, new TableauValeur(Tableau.Colonne(TableauRes.Tableau1ColonneElec), Tableau.Ligne(item.Item1), item.Item2));
-
-                // Syntaxe avec constructeur et détail
-                test.AddValue(Tableau,
-                                new TableauValeur(Tableau.Colonne(TableauRes.Tableau1ColonneTotal), Tableau.Ligne(item.Item1), item.Item2)
-                                {
-                                    DefaultValue = "0",
-                                    CelluleClass = "warning",
-                                    Format = EnumFormat.Marge,
-                                });
-
-                // Syntaxe complexe -- Ne garanti pas le minimum pour faire fonctionner le tableau
-                test.AddValue(Tableau,
-                                new TableauValeur()
-                                {
-                                    Colonne = Tableau.Colonne(TableauRes.Tableau1ColonneGaz),
-                                    Ligne = Tableau.Ligne(item.Item1),
-                                    Value = item.Item2,
-                                    DefaultValue = "0",
-                                    CelluleClass = "success",
-                                    Format = EnumFormat.Marge,
-                                });
+                Tableau.Value(TableauRes.Tableau1ColonneElec, item.Item1).
+                    SetValeur(item.Item2).
+                    SetSymbole("ù").
+                    SetCelluleClass("warning").
+                    SetFormat(EnumFormat.Default);
             }
-
-            Tableau.Values = Tableau.Values.Concat(test).ToDictionary(x => x.Key, y=>  y.Value);
+            
         }
         
     }
