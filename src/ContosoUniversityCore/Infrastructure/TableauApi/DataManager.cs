@@ -31,7 +31,7 @@ namespace CSharp.Test.TableauApi
             Tableau.DefaultValue = "-";
             Tableau.AddColonne();
             Tableau.AddColonne(TableauRes.Tableau1ColonneTotal);
-            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz).AddColonneCellulesClass("danger");
+            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz);
             Tableau.AddColonne(TableauRes.Tableau1ColonneElec);
             Tableau.AddColonne(TableauRes.Tableau1ColonneAutre);
             Tableau.AddColonne(TableauRes.Tableau1ColonneTeleReleve);
@@ -43,7 +43,7 @@ namespace CSharp.Test.TableauApi
                 AddLigne(TableauRes.LMargeBruteSem3);
 
             Tableau.AddLigne(TableauRes.LMargeBruteSansTacite);
-            Tableau.AddLigne(TableauRes.LMargeExtreme).AddLigneClass("warning")
+            Tableau.AddLigne(TableauRes.LMargeExtreme)
                 .AddChildLigne(TableauRes.LMargeExtremeSem1)
                 .AddLigne(TableauRes.LMargeExtremeSem2)
                 .AddLigne(TableauRes.LMargeExtremeSem3)
@@ -71,12 +71,8 @@ namespace CSharp.Test.TableauApi
             {
                 Tableau.Value(TableauRes.Tableau1ColonneElec, item.Item1).
                     SetValeur(item.Item2).
-                    SetSymbole("ù").
-                    SetCelluleClass("danger").
-                    SetCelluleClassPredicate("warning", X => X.Value < 10).
-                    SetFormat(EnumFormat.Custom);
+                    SetConditionalClass("success", "", x => x.Value > 10);
             }
-            
         }
         
     }

@@ -195,6 +195,35 @@ namespace CSharp.Test.TableauApi
             return tableauValeur;
         }
 
+        public static TableauValeur SetConditionalClass(this TableauValeur tableauValeur,
+                string classTrue,
+                string classFalse,
+                Func<TableauValeur,bool> predicate)
+        {
+
+            string testFunctionLocal(string t, string f, Func<TableauValeur, bool> p)
+            {
+                if (p(tableauValeur))
+                {
+                    return t;
+                }
+                return f;
+            }
+
+            Func<string> tests = () =>
+            {
+                if (predicate(tableauValeur))
+                {
+                    return classTrue;
+                }
+                return classFalse;
+            };
+            
+            tableauValeur.CelulleClassPredicate = tests;
+            
+            return tableauValeur;
+        }
+
         #endregion  
 
         public static IEnumerable<TableauValeur> TableauValeur(this Tableau tableau, Colonne colonne, Ligne ligne)
@@ -280,8 +309,15 @@ namespace CSharp.Test.TableauApi
                             if (z.Value.Value == null)
                                 z.Value.ValueString = z.Value.DefaultValue;
                             else z.Value.ValueString = z.Value.Value.ToString();
-
-                            tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
+                            
+                            if (z.Value.CelulleClassPredicate == null)
+                            { 
+                                tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
+                            }
+                            else
+                            {
+                                tableauHtml += $"<td class=\"{z.Value.CelulleClassPredicate()}\">";
+                            }
 
                             if (z.Value.Format == EnumFormat.Custom)
                             {
