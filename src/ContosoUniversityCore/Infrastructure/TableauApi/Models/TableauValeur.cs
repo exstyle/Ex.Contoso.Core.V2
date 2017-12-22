@@ -40,6 +40,10 @@ namespace CSharp.Test.TableauApi.Models
         public string Symbole { get; set; }
 
         public EnumFormat? Format { get; set; }
+        
+        
+
+
 
     }
 }

@@ -277,22 +277,33 @@ namespace CSharp.Test.TableauApi
                     tableauHtml += $"<tr class=\"{x.LigneClass}\"><td>{x.NomLigne}</td>";
                     tableau.Values.Where(y => y.Key.EndsWith($"-{x.Position}")).ToList().ForEach(z =>
                         {
-                            tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
-
                             if (z.Value.Value == null)
                                 z.Value.ValueString = z.Value.DefaultValue;
                             else z.Value.ValueString = z.Value.Value.ToString();
 
-                            if (z.Value.Format == null && z.Value.Value.ToString() != "")
-                            { 
-                                tableauHtml += $"{z.Value.ValueString}";
-                                tableauHtml += $" {z.Value.Symbole}</td>";
-                            }
+                            tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
 
+                            if (z.Value.Format == EnumFormat.Custom)
+                            {
+                                tableauHtml += $"{z.Value.ValueString}";
+
+                                if (!string.IsNullOrEmpty(z.Value.Symbole))
+                                    tableauHtml += $" {z.Value.Symbole}</td>";
+                            }
+                            
                             if (z.Value.Format == EnumFormat.Marge)
-                                tableauHtml += $"{z.Value.ValueString:C}";
-                        }
-                        );
+                            {
+                                double value = 0;
+                                if (double.TryParse(z.Value.ValueString, out value))
+                                {
+                                    tableauHtml += $"{value:C}";
+                                }
+                                else
+                                {
+                                    tableauHtml += $"{z.Value.ValueString:C}";
+                                }
+                            }
+                        });
 
                     tableauHtml += $"</tr>";
                 }

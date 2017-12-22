@@ -37,8 +37,8 @@ namespace CSharp.Test.TableauApi
             Tableau.AddColonne(TableauRes.Tableau1ColonneTeleReleve);
             Tableau.AddColonne(TableauRes.Tableau1ColonneProfile);
 
-            Tableau.AddLigne(TableauRes.LMargeBrute).DefaultValue("100").
-                AddChildLigne(TableauRes.LMargeBruteSem1).DefaultValue("130").
+            Tableau.AddLigne(TableauRes.LMargeBrute).DefaultValue("1000").
+                AddChildLigne(TableauRes.LMargeBruteSem1).DefaultValue("1300").
                 AddLigne(TableauRes.LMargeBruteSem2).
                 AddLigne(TableauRes.LMargeBruteSem3);
 
@@ -72,8 +72,9 @@ namespace CSharp.Test.TableauApi
                 Tableau.Value(TableauRes.Tableau1ColonneElec, item.Item1).
                     SetValeur(item.Item2).
                     SetSymbole("ù").
-                    SetCelluleClass("warning").
-                    SetFormat(EnumFormat.Default);
+                    SetCelluleClass("danger").
+                    SetCelluleClassPredicate("warning", X => X.Value < 10).
+                    SetFormat(EnumFormat.Custom);
             }
             
         }

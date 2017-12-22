@@ -7,7 +7,7 @@ namespace ContosoUniversityCore.Infrastructure.TableauApi.Models.Enums
 {
     public enum EnumFormat
     {
-        Default,
+        Custom,
         Marge
     }
 }
