@@ -28,6 +28,8 @@ namespace CSharp.Test.TableauApi.Models
         public EnumFormat? Format { get; set; }
 
         public string DefaultValue { get; set; }
+
+        public Action<double> CelulleClassPredicate { get; set; }
     }
     
     public class TableauKeys

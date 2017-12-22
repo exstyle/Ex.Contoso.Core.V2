@@ -20,7 +20,6 @@ namespace CSharp.Test.TableauApi
 
     public class DateManager 
     {
-
         public Tableau Tableau { get; set; } = new Tableau();
 
         public DateManager()
@@ -32,7 +31,9 @@ namespace CSharp.Test.TableauApi
             Tableau.AddColonne();
             Tableau.AddColonne(TableauRes.Tableau1ColonneTotal);
             Tableau.AddColonne(TableauRes.Tableau1ColonneGaz);
-            Tableau.AddColonne(TableauRes.Tableau1ColonneElec);
+            Tableau.AddColonne(TableauRes.Tableau1ColonneElec)
+                .SetConditionalClass("danger", "", (x) => x <= 1200)
+                .ColonneClass="sucess";
             Tableau.AddColonne(TableauRes.Tableau1ColonneAutre);
             Tableau.AddColonne(TableauRes.Tableau1ColonneTeleReleve);
             Tableau.AddColonne(TableauRes.Tableau1ColonneProfile);
@@ -51,7 +52,7 @@ namespace CSharp.Test.TableauApi
                 .AddLigne(TableauRes.LMargeExtremeSem5)
                 .AddLigne(TableauRes.LMargeExtremeSem6)
                     .AddChildLigne(TableauRes.LMargeExtremeSem6Lundi);
-
+           
             Tableau.Generate();
             GetResultats1();
         }
@@ -70,8 +71,8 @@ namespace CSharp.Test.TableauApi
             foreach (var item in query)
             {
                 Tableau.Value(TableauRes.Tableau1ColonneElec, item.Item1).
-                    SetValeur(item.Item2).
-                    SetConditionalClass("success", "", x => x.Value > 10);
+                    SetValeur(item.Item2);
+                    //SetConditionalClass("success", "", x => x.Value > 10);
             }
         }
         

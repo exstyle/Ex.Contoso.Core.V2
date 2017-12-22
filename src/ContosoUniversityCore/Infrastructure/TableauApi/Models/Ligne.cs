@@ -30,6 +30,11 @@ namespace CSharp.Test.TableauApi.Models
 
         public EnumFormat? Format { get; set; }
 
-        
+        public Func<double, bool> CelulleClassPredicate { get; set; }
+
+        public string ClassTrue { get; set; }
+
+        public string ClassFalse { get; set; }
+
     }
 }

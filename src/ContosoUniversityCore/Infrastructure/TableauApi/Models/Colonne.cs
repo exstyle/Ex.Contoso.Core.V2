@@ -18,5 +18,12 @@ namespace CSharp.Test.TableauApi.Models
         public string ColonneClass { get; set; }
 
         public string ColonneCelluleClass { get; set; }
+
+        public Func<double, bool> CelulleClassPredicate { get; set; }
+
+        public string ClassTrue { get; set; }
+
+        public string ClassFalse { get; set; }
+
     }
 }

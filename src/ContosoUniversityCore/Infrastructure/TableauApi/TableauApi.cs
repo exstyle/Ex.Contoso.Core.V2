@@ -160,6 +160,18 @@ namespace CSharp.Test.TableauApi
 
         }
 
+        public static Colonne SetConditionalClass(this Colonne colonne,
+                string classTrue,
+                string classFalse,
+                Func<double, bool> predicate)
+        {
+            colonne.ClassTrue = classTrue;
+            colonne.ClassFalse = classFalse;
+            colonne.CelulleClassPredicate = predicate;
+            
+            return colonne;
+        }
+
         #endregion
 
         #region < Values >
@@ -286,6 +298,54 @@ namespace CSharp.Test.TableauApi
 
         public static string ToHtml(this Tableau tableau, int height = 300, int width = 500)
         {
+            // Ici, le tableau est généré et les valeurs ont été généré.
+            // Il serait peut-être plus propre de tout déterminer ici, les valeurs et format attendu.
+            // En dehors des boucles html, où l'on perd en visibilité.
+            
+            foreach (TableauValeur val in tableau.Values.Select(x=> x.Value))
+            {
+                // Value to string
+                if (val.Value == null)
+                    val.ValueString = val.DefaultValue;
+                else val.ValueString = val.Value.ToString();
+
+                double doubleValue;
+                var isDouble = (double.TryParse(val.ValueString, out doubleValue));
+
+                if (isDouble)
+                {
+                    //Class cellule
+                    if (val.CelulleClassPredicate != null)
+                    {
+                        val.CelluleClass = val.CelulleClassPredicate();
+                    }
+                    else if (val.Ligne.CelulleClassPredicate != null)
+                    {
+                        val.CelluleClass = val.Ligne.CelulleClassPredicate(doubleValue) ?
+                                                        val.Ligne.ClassTrue :
+                                                        val.Ligne.ClassFalse;
+                    }
+                    else if (val.Colonne.CelulleClassPredicate != null)
+                    {
+                        val.CelluleClass = val.Colonne.CelulleClassPredicate(doubleValue) ?
+                                                        val.Colonne.ClassTrue :
+                                                        val.Colonne.ClassFalse;
+                    }
+                    
+                }
+
+                // Value
+                if (val.Format == EnumFormat.Custom)
+                {
+                    val.ValueString = $"{val.ValueString} {val.Symbole}".TrimEnd();
+                }
+                else if (val.Format == EnumFormat.Marge)
+                {
+                    if (isDouble)
+                        val.ValueString = $"{doubleValue:C}";
+                }
+            }
+            
             var style = height == 0 ? "" : $"height: {height}px; overflow: auto;";
             string tableauHtml = $"<div class=\"card mb-3\">";
             tableauHtml += $"<p class=\"card-header red white-text small-header\">{ tableau.Title}</p>";
@@ -306,39 +366,8 @@ namespace CSharp.Test.TableauApi
                     tableauHtml += $"<tr class=\"{x.LigneClass}\"><td>{x.NomLigne}</td>";
                     tableau.Values.Where(y => y.Key.EndsWith($"-{x.Position}")).ToList().ForEach(z =>
                         {
-                            if (z.Value.Value == null)
-                                z.Value.ValueString = z.Value.DefaultValue;
-                            else z.Value.ValueString = z.Value.Value.ToString();
-                            
-                            if (z.Value.CelulleClassPredicate == null)
-                            { 
-                                tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
-                            }
-                            else
-                            {
-                                tableauHtml += $"<td class=\"{z.Value.CelulleClassPredicate()}\">";
-                            }
-
-                            if (z.Value.Format == EnumFormat.Custom)
-                            {
-                                tableauHtml += $"{z.Value.ValueString}";
-
-                                if (!string.IsNullOrEmpty(z.Value.Symbole))
-                                    tableauHtml += $" {z.Value.Symbole}</td>";
-                            }
-                            
-                            if (z.Value.Format == EnumFormat.Marge)
-                            {
-                                double value = 0;
-                                if (double.TryParse(z.Value.ValueString, out value))
-                                {
-                                    tableauHtml += $"{value:C}";
-                                }
-                                else
-                                {
-                                    tableauHtml += $"{z.Value.ValueString:C}";
-                                }
-                            }
+                            tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
+                            tableauHtml += $"{z.Value.ValueString}";   
                         });
 
                     tableauHtml += $"</tr>";
