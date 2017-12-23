@@ -25,15 +25,18 @@ namespace CSharp.Test.TableauApi
         public DateManager()
         {
             Tableau.Title = "Super tableau";
-            Tableau.Symbole = "$";
             Tableau.Format = EnumFormat.Marge;
-            Tableau.DefaultValue = "-";
+            Tableau.DefaultValue = "-1";
             Tableau.AddColonne();
             Tableau.AddColonne(TableauRes.Tableau1ColonneTotal);
-            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz);
+
+            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz).SetDefaultValue("10")
+                            .SetConditionalClass("success","", (x) => x > 10);
+
             Tableau.AddColonne(TableauRes.Tableau1ColonneElec)
                 .SetConditionalClass("danger", "", (x) => x <= 1200)
                 .ColonneClass="sucess";
+
             Tableau.AddColonne(TableauRes.Tableau1ColonneAutre);
             Tableau.AddColonne(TableauRes.Tableau1ColonneTeleReleve);
             Tableau.AddColonne(TableauRes.Tableau1ColonneProfile);

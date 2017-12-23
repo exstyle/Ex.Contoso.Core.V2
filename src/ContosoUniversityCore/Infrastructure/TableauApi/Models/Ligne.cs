@@ -28,7 +28,7 @@ namespace CSharp.Test.TableauApi.Models
 
         public string Symbole { get; set; }
 
-        public EnumFormat? Format { get; set; }
+        public EnumFormat Format { get; set; } = EnumFormat.Initial;
 
         public Func<double, bool> CelulleClassPredicate { get; set; }
 

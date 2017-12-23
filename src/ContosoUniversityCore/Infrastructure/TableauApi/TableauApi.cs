@@ -160,6 +160,13 @@ namespace CSharp.Test.TableauApi
 
         }
 
+        public static Colonne SetDefaultValue(this Colonne colonne, string value)
+        {
+            colonne.DefaultValue = value;
+
+            return colonne;
+        }
+
         public static Colonne SetConditionalClass(this Colonne colonne,
                 string classTrue,
                 string classFalse,
@@ -254,25 +261,30 @@ namespace CSharp.Test.TableauApi
             {
                 foreach (Ligne ligne in tableau.Lignes)
                 {
+                    // Récupération de la cellule courante
                     var currentCellule = new TableauKeys(colonne.Position, ligne.Position).ToString();
-                    
-                    // Default Value
-                    if ((ligne.DefaultValue == null) && (!string.IsNullOrEmpty(tableau.DefaultValue)))
-                        ligne.DefaultValue = tableau.DefaultValue;
 
-                    // Symbole ligne
+                    // Quel defaultValue prendre
+                    var defaultValue = ligne.DefaultValue ?? colonne.DefaultValue ?? tableau.DefaultValue;
+
+                    // Quel default Format prendre
+                    var format = EnumFormat.Initial;
+                    List<EnumFormat> test = new List<EnumFormat>() { ligne.Format, colonne.Format , tableau.Format};
+                    if (test.Where(x=> x != EnumFormat.Initial).Any())
+                    {
+                        format = test.Where(x => x != EnumFormat.Initial).First();
+                    }
+                    
+                    // Quel Symbole ligne prendre
                     if (string.IsNullOrEmpty(ligne.Symbole) && !String.IsNullOrEmpty(tableau.Symbole))
                         ligne.Symbole = tableau.Symbole;
                     
-                    // Enum Format
-                    if (ligne.Format == null && tableau.Format != null)
-                        ligne.Format = tableau.Format;
-                    
+                    // Initialisation des paramètres
                     tableau.Values[currentCellule] = new TableauValeur(colonne, ligne)
                     {
                         Symbole = ligne.Symbole,
-                        Format = ligne.Format,
-                        DefaultValue = ligne.DefaultValue,
+                        Format = format,
+                        DefaultValue = defaultValue,
                         CelluleClass = string.Concat(ligne.LigneCelluleClass, colonne.ColonneCelluleClass)
                     };
 
