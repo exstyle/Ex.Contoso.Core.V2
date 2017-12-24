@@ -12,6 +12,8 @@ namespace CSharp.Test.TableauApi.Models
             NomColonne = nomColonne;
         }
 
+        public Tableau Tableau { get; set; }
+
         public string NomColonne { get; set; }
 
         public int Position { get; set; }

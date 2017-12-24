@@ -13,36 +13,35 @@ namespace CSharp.Test.TableauApi
     {
         public static void Run()
         {
-            DateManager ma = new DateManager();
+            DataManager ma = new DataManager();
         }
 
     }
 
-    public class DateManager 
+    public class DataManager
     {
         public Tableau Tableau { get; set; } = new Tableau();
 
-        public DateManager()
+        public DataManager()
         {
-            Tableau.Title = "Super tableau";
-            Tableau.Format = EnumFormat.Marge;
-            Tableau.DefaultValue = "-1";
-            Tableau.AddColonne();
-            Tableau.AddColonne(TableauRes.Tableau1ColonneTotal);
+            Tableau.SetTitle("Mon premier tableau")
+                .SetFormat(EnumFormat.Marge)
+                .SetDefaultValue("1")
+                .SetConditionalClass("warning", "", (x) => x < 10);
+            
+            Tableau.AddColonne()
+                .AddColonne(TableauRes.Tableau1ColonneTotal)
+                .AddColonne(TableauRes.Tableau1ColonneGaz).SetDefaultValue("10")
+                    .SetConditionalClass("success", "", (x) => x > 10)
+                .AddColonne(TableauRes.Tableau1ColonneElec)
+                    .SetConditionalClass("danger", "", (x) => x <= 1200)
+                .AddColonneClass("sucess")
+                .AddColonne(TableauRes.Tableau1ColonneAutre)
+                .AddColonne(TableauRes.Tableau1ColonneTeleReleve)
+                .AddColonne(TableauRes.Tableau1ColonneProfile);
 
-            Tableau.AddColonne(TableauRes.Tableau1ColonneGaz).SetDefaultValue("10")
-                            .SetConditionalClass("success","", (x) => x > 10);
-
-            Tableau.AddColonne(TableauRes.Tableau1ColonneElec)
-                .SetConditionalClass("danger", "", (x) => x <= 1200)
-                .ColonneClass="sucess";
-
-            Tableau.AddColonne(TableauRes.Tableau1ColonneAutre);
-            Tableau.AddColonne(TableauRes.Tableau1ColonneTeleReleve);
-            Tableau.AddColonne(TableauRes.Tableau1ColonneProfile);
-
-            Tableau.AddLigne(TableauRes.LMargeBrute).DefaultValue("1000").
-                AddChildLigne(TableauRes.LMargeBruteSem1).DefaultValue("1300").
+            Tableau.AddLigne(TableauRes.LMargeBrute).SetDefaultValue("1000").
+                AddChildLigne(TableauRes.LMargeBruteSem1).SetDefaultValue("1300").
                 AddLigne(TableauRes.LMargeBruteSem2).
                 AddLigne(TableauRes.LMargeBruteSem3);
 
@@ -55,11 +54,11 @@ namespace CSharp.Test.TableauApi
                 .AddLigne(TableauRes.LMargeExtremeSem5)
                 .AddLigne(TableauRes.LMargeExtremeSem6)
                     .AddChildLigne(TableauRes.LMargeExtremeSem6Lundi);
-           
+
             Tableau.Generate();
             GetResultats1();
         }
-        
+
         public void GetResultats1()
         {
             List<TableauValeur> results = new List<TableauValeur>();
@@ -75,9 +74,9 @@ namespace CSharp.Test.TableauApi
             {
                 Tableau.Value(TableauRes.Tableau1ColonneElec, item.Item1).
                     SetValeur(item.Item2);
-                    //SetConditionalClass("success", "", x => x.Value > 10);
+                //SetConditionalClass("success", "", x => x.Value > 10);
             }
         }
-        
+
     }
 }

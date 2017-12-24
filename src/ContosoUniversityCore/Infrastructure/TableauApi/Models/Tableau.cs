@@ -29,7 +29,11 @@ namespace CSharp.Test.TableauApi.Models
 
         public string DefaultValue { get; set; }
 
-        public Action<double> CelulleClassPredicate { get; set; }
+        public Func<double, bool> CelulleClassPredicate { get; set; }
+
+        public string ClassTrue { get; set; }
+
+        public string ClassFalse { get; set; }
     }
     
     public class TableauKeys

@@ -51,13 +51,13 @@
                     .OrderBy(d => d.Id)
                     .ProjectToListAsync<Result.Course>();
 
-                var tableauS = new DateManager();
+                var tableauS = new DataManager();
                 var test = tableauS.Tableau;
                 return new Result
                 {
                     Courses = courses,
                     SelectedDepartment = message.SelectedDepartment,
-                    TableauSynthese = new HtmlString(test.ToHtml())
+                    TableauSynthese = new HtmlString(test.Render())
                 };
             }
         }
