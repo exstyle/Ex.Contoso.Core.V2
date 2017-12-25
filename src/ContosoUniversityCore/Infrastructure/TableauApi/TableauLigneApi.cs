@@ -14,7 +14,7 @@ namespace CSharp.Test.TableauApi
     /// </summary>
     public static partial class TableauApi
     {
-       
+
         /// <summary>
         /// Récupère la ligne du tableau pour un nom donnée.
         /// </summary>
@@ -33,14 +33,14 @@ namespace CSharp.Test.TableauApi
         /// <param name="tableau">Tableau de référence pour ajouter une ligne</param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Ligne AddLigne(this Tableau tableau, string name)
+        public static Ligne AddLigne(this Tableau tableau, string name, int? indentation = null)
         {
             if (tableau.Lignes == null)
                 tableau.Lignes = new List<Ligne>();
 
             Ligne ligne = new Ligne(name);
             ligne.Position = tableau.Lignes.Count;
-            ligne.Indentation = 0;
+            ligne.Indentation = indentation ?? 0;
             ligne.Tableau = tableau;
             tableau.Lignes.Add(ligne);
 
@@ -103,6 +103,56 @@ namespace CSharp.Test.TableauApi
 
         }
 
+        public static Ligne AddLigneTitre1(this Tableau tableau, string name)
+        {
+            return tableau.AddLigne(name).SetLigneClass("h3").SetIndentation(0).SetDefaultValue("").SetSymbole("");
+        }
+
+        public static Ligne AddLigneTitre2(this Tableau tableau, string name)
+        {
+            return tableau.AddLigne(name).SetLigneClass("h4").SetIndentation(1).SetDefaultValue("").SetSymbole("");
+        }
+
+        public static Ligne AddLigneTitre3(this Tableau tableau, string name)
+        {
+            return tableau.AddLigne(name).SetLigneClass("h5").SetIndentation(2).SetDefaultValue("").SetSymbole("");
+        }
+
+        public static Ligne AddLigneTitre4(this Tableau tableau, string name)
+        {
+            return tableau.AddLigne(name).SetLigneClass("h6").SetIndentation(3).SetDefaultValue("").SetSymbole("");
+        }
+
+        public static Ligne AddLigneTitre1(this Ligne ligne, string name)
+        {
+            ligne.AddLigne(name).SetLigneClass("h3").SetIndentation(0).SetDefaultValue("").SetSymbole("");
+            return ligne;
+        }
+
+        public static Ligne AddLigneTitre2(this Ligne ligne, string name)
+        {
+            ligne.AddLigne(name).SetLigneClass("h4").SetIndentation(1).SetDefaultValue("").SetSymbole("");
+            return ligne;
+        }
+
+        public static Ligne AddLigneTitre3(this Ligne ligne, string name)
+        {
+            ligne.AddLigne(name).SetLigneClass("h5").SetIndentation(2).SetDefaultValue("").SetSymbole("");
+            return ligne;
+        }
+
+        public static Ligne AddLigneTitre4(this Ligne ligne, string name)
+        {
+            ligne.AddLigne(name).SetLigneClass("h6").SetIndentation(3).SetDefaultValue("").SetSymbole("");
+            return ligne;
+        }
+
+        public static Ligne SetIndentation(this Ligne ligne, int indentation)
+        {
+            ligne.Indentation = indentation;
+            return ligne;
+        }
+
         /// <summary>
         /// Méthode permettant de setter une value par default
         /// </summary>
@@ -146,7 +196,7 @@ namespace CSharp.Test.TableauApi
         /// <param name="ligne"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public static Ligne AddLigneClass(this Ligne ligne, string style)
+        public static Ligne SetLigneClass(this Ligne ligne, string style)
         {
             ligne.LigneClass = style;
             return ligne;
@@ -158,7 +208,7 @@ namespace CSharp.Test.TableauApi
         /// <param name="ligne"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public static Ligne AddLigneCellulesClass(this Ligne ligne, string style)
+        public static Ligne SetLigneCellulesClass(this Ligne ligne, string style)
         {
             ligne.LigneCelluleClass = style;
             return ligne;
@@ -184,6 +234,6 @@ namespace CSharp.Test.TableauApi
 
             return ligne;
         }
-        
+
     }
 }

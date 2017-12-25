@@ -9,6 +9,11 @@ namespace ContosoUniversityCore.Infrastructure.TableauApi.Models.Enums
     {
         Initial = 0,
         Custom,
-        Marge
+        Marge,
+        Energie,
+        Titre1,
+        Titre2,
+        Titre3,
+        Titre4
     }
 }

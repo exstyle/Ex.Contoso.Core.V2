@@ -27,7 +27,8 @@ namespace CSharp.Test.TableauApi
             Tableau.SetTitle("Mon premier tableau")
                 .SetFormat(EnumFormat.Marge)
                 .SetDefaultValue("1")
-                .SetConditionalClass("warning", "", (x) => x < 10);
+                .SetConditionalClass("warning", "", (x) => x < 10)
+                .SetTableauClass("table table-sm table-dark table-hover");
             
             Tableau.AddColonne()
                 .AddColonne(TableauRes.Tableau1ColonneTotal)
@@ -40,19 +41,20 @@ namespace CSharp.Test.TableauApi
                 .AddColonne(TableauRes.Tableau1ColonneTeleReleve)
                 .AddColonne(TableauRes.Tableau1ColonneProfile);
 
-            Tableau.AddLigne(TableauRes.LMargeBrute).SetDefaultValue("1000").
+            Tableau.AddLigneTitre1("Marges").SetLigneClass("h3").SetDefaultValue("").
+                AddChildLigne(TableauRes.LMargeBrute).SetDefaultValue("1000").
                 AddChildLigne(TableauRes.LMargeBruteSem1).SetDefaultValue("1300").
                 AddLigne(TableauRes.LMargeBruteSem2).
                 AddLigne(TableauRes.LMargeBruteSem3);
 
-            Tableau.AddLigne(TableauRes.LMargeBruteSansTacite);
-            Tableau.AddLigne(TableauRes.LMargeExtreme)
+            Tableau.AddLigne(TableauRes.LMargeBruteSansTacite, 1);
+            Tableau.AddLigne(TableauRes.LMargeExtreme, 1)
                 .AddChildLigne(TableauRes.LMargeExtremeSem1)
                 .AddLigne(TableauRes.LMargeExtremeSem2)
                 .AddLigne(TableauRes.LMargeExtremeSem3)
                 .AddLigne(TableauRes.LMargeExtremeSem4)
                 .AddLigne(TableauRes.LMargeExtremeSem5)
-                .AddLigne(TableauRes.LMargeExtremeSem6)
+                .AddLigneTitre3(TableauRes.LMargeExtremeSem6)
                     .AddChildLigne(TableauRes.LMargeExtremeSem6Lundi);
 
             Tableau.Generate();
@@ -60,7 +62,7 @@ namespace CSharp.Test.TableauApi
         }
 
         public void GetResultats1()
-        {
+        { 
             List<TableauValeur> results = new List<TableauValeur>();
 
             List<Tuple<string, double, double, double, double, double>> query = new List<Tuple<string, double, double, double, double, double>>() {

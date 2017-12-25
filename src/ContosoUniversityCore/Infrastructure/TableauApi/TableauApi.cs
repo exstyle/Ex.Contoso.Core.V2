@@ -14,29 +14,90 @@ namespace CSharp.Test.TableauApi
     /// </summary>
     public static partial class TableauApi
     {
+        /// <summary>
+        /// Méthode pour mettre le titre du tableau
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
         public static Tableau SetTitle(this Tableau tableau, string title)
         {
             tableau.Title = title;
             return tableau;
         }
 
+        /// <summary>
+        /// Méthode pour mettre le symbole du tableau
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="symbole"></param>
+        /// <returns></returns>
         public static Tableau SetSymbole (this Tableau tableau, string symbole)
         {
             tableau.Symbole = symbole;
             return tableau;
         }
 
+        /// <summary>
+        /// Méthode pour mettre le format du tableau
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="format"></param>
+        /// <returns></returns>
         public static Tableau SetFormat(this Tableau tableau, EnumFormat format)
         {
             tableau.Format = format;
             return tableau;
         }
 
+        /// <summary>
+        /// Méthode pour mettre les valeur par default du tableau
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
         public static Tableau SetDefaultValue(this Tableau tableau, string defaultValue)
         {
             tableau.DefaultValue = defaultValue;
             return tableau;
         }
+
+        /// <summary>
+        /// Méthode permettant de déclarer une class
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static Tableau SetTableauClass(this Tableau tableau, string style)
+        {
+            tableau.TClass = style;
+            return tableau;
+        }
+
+        /// <summary>
+        /// Méthode permettant de déclarer une class
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static Tableau SetTHeadClass(this Tableau tableau, string style)
+        {
+            tableau.THeadClass = style;
+            return tableau;
+        }
+
+        /// <summary>
+        /// Méthode permettant de déclarer une class
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static Tableau SetTBodyClass(this Tableau tableau, string style)
+        {
+            tableau.TBodyClass = style;
+            return tableau;
+        }
+
 
         /// <summary>
         /// Méthode permettant de mettre une classe où une autre sous condition
@@ -163,7 +224,21 @@ namespace CSharp.Test.TableauApi
                     if (isDouble)
                         val.ValueString = $"{doubleValue:C}";
                 }
+                else if (val.Format == EnumFormat.Energie)
+                {
+                    if (isDouble)
+                    {
+                        val.ValueString = $"{doubleValue:F}";
+                    }
+                }
             }
+
+            foreach (Ligne ligne in tableau.Lignes)
+            {
+                ligne.NomLigne = $"{new string(' ', ligne.Indentation * 4).Replace(" ", "&nbsp;")}{ligne.NomLigne}";
+
+            }
+
         }
 
         /// <summary>
@@ -179,9 +254,9 @@ namespace CSharp.Test.TableauApi
             string tableauHtml = $"<div class=\"card mb-3\">";
             tableauHtml += $"<p class=\"card-header red white-text small-header\">{ tableau.Title}</p>";
             tableauHtml += $"<div class=\"card-body\" style=\"{style}\">";
-            tableauHtml += $"<table class=\"table table-sm table-dark\">";
+            tableauHtml += $"<table class=\"{tableau.TClass}\">";
 
-            tableauHtml += $"<thead>";
+            tableauHtml += $"<thead class=\"{tableau.THeadClass}\">";
             tableauHtml += $"<tr>";
             tableau.Colonnes.ForEach(x =>
                 tableauHtml += $"<th class=\"{x.ColonneClass}\">{x.NomColonne}</th>"
@@ -189,10 +264,11 @@ namespace CSharp.Test.TableauApi
 
             tableauHtml += $"</tr>";
             tableauHtml += $"</thead>";
-            tableauHtml += $"<tbody>";
+            tableauHtml += $"<tbody class=\"{tableau.TBodyClass}\">";
             tableau.Lignes.ForEach(x =>
-                {
-                    tableauHtml += $"<tr class=\"{x.LigneClass}\"><td>{x.NomLigne}</td>";
+                {   
+                    tableauHtml += $"<tr><td class=\"{x.LigneClass}\">{x.NomLigne}</td>";
+                    
                     tableau.Values.Where(y => y.Key.EndsWith($"-{x.Position}")).ToList().ForEach(z =>
                         {
                             tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
@@ -202,6 +278,7 @@ namespace CSharp.Test.TableauApi
                     tableauHtml += $"</tr>";
                 }
             );
+
             tableauHtml += $"</tbody>";
             tableauHtml += $"</table>";
 
