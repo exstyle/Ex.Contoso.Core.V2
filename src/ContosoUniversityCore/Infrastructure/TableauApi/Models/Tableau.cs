@@ -15,7 +15,7 @@ namespace CSharp.Test.TableauApi.Models
         public Dictionary<string,TableauValeur> Values { get; set; }
 
         // Mise en forme et propriétés
-        public string TClass { get; set; }
+        public string TClass { get; set; } = "table table-sm";
 
         public string THeadClass { get; set; }
 
@@ -34,6 +34,8 @@ namespace CSharp.Test.TableauApi.Models
         public string ClassTrue { get; set; }
 
         public string ClassFalse { get; set; }
+
+        public string TableauCelluleClass { get; set; }
     }
     
     public class TableauKeys

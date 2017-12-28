@@ -76,7 +76,7 @@ namespace CSharp.Test.TableauApi
         /// <param name="colonne"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public static Colonne AddColonneClass(this Colonne colonne, string style)
+        public static Colonne SetColonneClass(this Colonne colonne, string style)
         {
             colonne.ColonneClass = style;
             return colonne;
@@ -88,7 +88,7 @@ namespace CSharp.Test.TableauApi
         /// <param name="colonne"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public static Colonne AddColonneCellulesClass(this Colonne colonne, string style)
+        public static Colonne SetColonneCellulesClass(this Colonne colonne, string style)
         {
             colonne.ColonneCelluleClass = style;
             return colonne;
@@ -100,7 +100,7 @@ namespace CSharp.Test.TableauApi
         /// <param name="colonne"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Colonne SetDefaultValue(this Colonne colonne, string value)
+        public static Colonne SetCelullueDefaultValue(this Colonne colonne, string value)
         {
             colonne.DefaultValue = value;
 
@@ -116,7 +116,7 @@ namespace CSharp.Test.TableauApi
         /// <param name="classFalse"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static Colonne SetConditionalClass(this Colonne colonne,
+        public static Colonne SetCelullueConditionalClass(this Colonne colonne,
                 string classTrue,
                 string classFalse,
                 Func<double, bool> predicate)

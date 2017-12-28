@@ -74,6 +74,12 @@ namespace CSharp.Test.TableauApi
             return tableau;
         }
 
+        public static Tableau SetTableauCelluleClass(this Tableau tableau, string style)
+        {
+            tableau.TableauCelluleClass = style;
+            return tableau;
+        }
+
         /// <summary>
         /// Méthode permettant de déclarer une class
         /// </summary>
@@ -108,7 +114,7 @@ namespace CSharp.Test.TableauApi
         /// <param name="classFalse"></param>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static Tableau SetConditionalClass(this Tableau tableau,
+        public static Tableau SetCelulleConditionalClass(this Tableau tableau,
                 string classTrue,
                 string classFalse,
                 Func<double, bool> predicate)
@@ -155,7 +161,7 @@ namespace CSharp.Test.TableauApi
                         Symbole = ligne.Symbole,
                         Format = format,
                         DefaultValue = defaultValue,
-                        CelluleClass = string.Concat(ligne.LigneCelluleClass, colonne.ColonneCelluleClass)
+                        CelluleClass = ligne.LigneCelluleClass ?? colonne.ColonneCelluleClass ?? tableau.TableauCelluleClass
                     };
 
                 }

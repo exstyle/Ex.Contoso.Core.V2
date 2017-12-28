@@ -66,6 +66,94 @@ namespace CSharp.Test.TableauApi
 
         }
 
+
+        /// <summary>
+        /// Méthode permettant d'ajouter une ligne enfant au tableu courant (ne devrait pas servir)
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Ligne NewLine(this Tableau tableau, string name)
+        {
+            if (tableau.Lignes == null)
+                tableau.Lignes = new List<Ligne>();
+
+            Ligne ligne = new Ligne(name);;
+            
+            ligne.Position = tableau.Lignes.Count;
+            ligne.Indentation = 1;
+            ligne.Tableau = tableau;
+            tableau.Lignes.Add(ligne);
+
+            return ligne;
+
+        }
+
+        /// <summary>
+        /// Méthode permettant d'ajouter une ligne enfant au tableu courant (ne devrait pas servir)
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Ligne NewLine(this Ligne ligne, string name)
+        {
+            Ligne newLigne = new Ligne(name)
+            {
+                Position = ligne.Position + 1,
+                Indentation = 1,
+
+                Tableau = ligne.Tableau
+            };
+            ligne.Tableau.Lignes.Add(newLigne);
+
+            return newLigne;
+
+        }
+
+        /// <summary>
+        /// Méthode permettant d'ajouter une ligne enfant au tableu courant (ne devrait pas servir)
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Ligne NewChildLine(this Ligne ligne, string name)
+        {
+
+            var tableau = ligne.Tableau;
+            var last = ligne.Tableau.Lignes.Last();
+
+            Ligne newLigne = new Ligne(name);
+            newLigne.Position = ligne.Position + 1;
+            newLigne.Indentation = 2;
+            newLigne.Tableau = tableau;
+            tableau.Lignes.Add(newLigne);
+
+            return newLigne;
+
+        }
+
+        /// <summary>
+        /// Méthode permettant d'ajouter une ligne enfant au tableu courant (ne devrait pas servir)
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Ligne NewGrandChildrenLine(this Ligne ligne, string name)
+        {
+            var tableau = ligne.Tableau;
+            var last = ligne.Tableau.Lignes.Last();
+
+            Ligne newLigne = new Ligne(name);
+            newLigne.Position = ligne.Position + 1;
+            newLigne.Indentation = 3;
+            newLigne.Tableau = tableau;
+            tableau.Lignes.Add(newLigne);
+
+            return newLigne;
+
+        }
+
+
         /// <summary>
         /// Méthode permettant d'ajouter une ligne enfant au tableu courant (ne devrait pas servir)
         /// </summary>
@@ -103,47 +191,71 @@ namespace CSharp.Test.TableauApi
 
         }
 
-        public static Ligne AddLigneTitre1(this Tableau tableau, string name)
+        public static Ligne AddLigneTitre1(this Tableau tableau, string name, int position = 0)
         {
-            return tableau.AddLigne(name).SetLigneClass("h3").SetIndentation(0).SetDefaultValue("").SetSymbole("");
+            return tableau.AddLigne(name).
+                ResetLigne().
+                SetLigneClass("h3").
+                SetIndentation(position);
         }
 
-        public static Ligne AddLigneTitre2(this Tableau tableau, string name)
+        public static Ligne AddLigneTitre2(this Tableau tableau, string name, int indentation = 1)
         {
-            return tableau.AddLigne(name).SetLigneClass("h4").SetIndentation(1).SetDefaultValue("").SetSymbole("");
+            return tableau.AddLigne(name)
+                .ResetLigne()
+                .SetLigneClass("h4")
+                .SetIndentation(indentation);
         }
 
-        public static Ligne AddLigneTitre3(this Tableau tableau, string name)
+        public static Ligne AddLigneTitre3(this Tableau tableau, string name, int indentation = 2)
         {
-            return tableau.AddLigne(name).SetLigneClass("h5").SetIndentation(2).SetDefaultValue("").SetSymbole("");
+            return tableau.AddLigne(name)
+                .ResetLigne()
+                .SetLigneClass("h5")
+                .SetIndentation(indentation);
         }
 
-        public static Ligne AddLigneTitre4(this Tableau tableau, string name)
+        public static Ligne AddLigneTitre4(this Tableau tableau, string name, int indentation = 3)
         {
-            return tableau.AddLigne(name).SetLigneClass("h6").SetIndentation(3).SetDefaultValue("").SetSymbole("");
+            return tableau.AddLigne(name)
+                .ResetLigne()
+                .SetLigneClass("h6")
+                .SetIndentation(indentation);
         }
 
-        public static Ligne AddLigneTitre1(this Ligne ligne, string name)
+        public static Ligne AddLigneTitre1(this Ligne ligne, string name, int indentation = 0)
         {
-            ligne.AddLigne(name).SetLigneClass("h3").SetIndentation(0).SetDefaultValue("").SetSymbole("");
+            return ligne.AddLigne(name)
+                .ResetLigne()
+                .SetLigneClass("h3")
+                .SetIndentation(indentation);
+        }
+
+        public static Ligne AddLigneTitre2(this Ligne ligne, string name, int indentation = 1)
+        {
+            ligne.AddLigne(name)
+                .SetLigneClass("h4")
+                .ResetLigne()
+                .SetIndentation(indentation);
             return ligne;
         }
 
-        public static Ligne AddLigneTitre2(this Ligne ligne, string name)
+        public static Ligne AddLigneTitre3(this Ligne ligne, string name, int indentation = 2)
         {
-            ligne.AddLigne(name).SetLigneClass("h4").SetIndentation(1).SetDefaultValue("").SetSymbole("");
+            ligne.AddLigne(name)
+                .ResetLigne()
+                .SetLigneClass("h5")
+                .SetIndentation(indentation);
             return ligne;
         }
 
-        public static Ligne AddLigneTitre3(this Ligne ligne, string name)
+        public static Ligne AddLigneTitre4(this Ligne ligne, string name, int indentation = 3)
         {
-            ligne.AddLigne(name).SetLigneClass("h5").SetIndentation(2).SetDefaultValue("").SetSymbole("");
-            return ligne;
-        }
-
-        public static Ligne AddLigneTitre4(this Ligne ligne, string name)
-        {
-            ligne.AddLigne(name).SetLigneClass("h6").SetIndentation(3).SetDefaultValue("").SetSymbole("");
+            ligne
+                .AddLigne(name)
+                .ResetLigne()
+                .SetLigneClass("h6")
+                .SetIndentation(indentation);
             return ligne;
         }
 
@@ -166,6 +278,16 @@ namespace CSharp.Test.TableauApi
             return ligne;
         }
 
+        /// <summary>
+        /// L'objectif de cette méthode est de remettre les paramètres par default.
+        /// </summary>
+        /// <param name="ligne"></param>
+        /// <returns></returns>
+        public static Ligne ResetLigne(this Ligne ligne)
+        {
+            ligne.SetIndentation(0).SetDefaultValue(null).SetSymbole(null).SetFormat(EnumFormat.Initial);
+            return ligne;
+        }
         /// <summary>
         /// Permet de donner un symbole par défault pour la ligne courante
         /// </summary>
