@@ -16,7 +16,7 @@ namespace CSharp.Test.TableauApi
     {
       
         /// <summary>
-        /// 
+        /// Méthode permettant de trouver une celulle de tableau
         /// </summary>
         /// <param name="tableau"></param>
         /// <param name="colonneName"></param>
@@ -30,7 +30,7 @@ namespace CSharp.Test.TableauApi
         }
 
         /// <summary>
-        /// 
+        /// Méthode permettant de définir un format pour toutes les cellules du tableau (hors titre colonne / Ligne)
         /// </summary>
         /// <param name="tableauValeur"></param>
         /// <param name="format"></param>
@@ -42,7 +42,7 @@ namespace CSharp.Test.TableauApi
         }
 
         /// <summary>
-        /// 
+        /// Méthode permettant de définir une valeur
         /// </summary>
         /// <param name="tableauValeur"></param>
         /// <param name="value"></param>
@@ -54,7 +54,7 @@ namespace CSharp.Test.TableauApi
         }
 
         /// <summary>
-        /// 
+        /// Méthode permettant de définir un symbole
         /// </summary>
         /// <param name="tableauValeur"></param>
         /// <param name="symbole"></param>
@@ -66,7 +66,7 @@ namespace CSharp.Test.TableauApi
         }
 
         /// <summary>
-        /// 
+        /// Méthode permettant d'indiquer la class pour chaque celulle du tableau (hors Ligne et Colonne)
         /// </summary>
         /// <param name="tableauValeur"></param>
         /// <param name="style"></param>

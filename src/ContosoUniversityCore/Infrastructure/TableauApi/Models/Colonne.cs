@@ -18,7 +18,7 @@ namespace CSharp.Test.TableauApi.Models
 
         public int Position { get; set; }
 
-        public string ColonneClass { get; set; }
+        public string ColonneClass { get; set; } = "text-center";
 
         public string ColonneCelluleClass { get; set; }
 

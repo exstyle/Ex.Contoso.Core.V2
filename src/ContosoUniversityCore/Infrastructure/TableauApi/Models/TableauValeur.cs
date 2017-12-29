@@ -43,5 +43,18 @@ namespace CSharp.Test.TableauApi.Models
 
         public Func<string> CelulleClassPredicate { get; set; }
 
+        public TableauLink TableauLink { get; set; }
+
+        public string TableauLinkUrl { get; set; }
+
+    }
+
+    public class TableauLink
+    {
+        public string Controller { get; set; }
+
+        public string Action { get; set; }
+
+        public string Filter { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using CSharp.Test.TableauApi.Models;
 using ContosoUniversityCore.Infrastructure.TableauApi.Models.Enums;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace CSharp.Test.TableauApi
 {
@@ -74,6 +75,18 @@ namespace CSharp.Test.TableauApi
             return tableau;
         }
 
+        /// <summary>
+        /// Méthode permettant de déclarer une class
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static Tableau AddTableauClass(this Tableau tableau, string style)
+        {
+            tableau.TClass += $" {style}";
+            return tableau;
+        }
+        
         public static Tableau SetTableauCelluleClass(this Tableau tableau, string style)
         {
             tableau.TableauCelluleClass = style;
@@ -234,7 +247,7 @@ namespace CSharp.Test.TableauApi
                 {
                     if (isDouble)
                     {
-                        val.ValueString = $"{doubleValue:F}";
+                        val.ValueString = $"{doubleValue:# ###} GWh";
                     }
                 }
             }
@@ -277,8 +290,14 @@ namespace CSharp.Test.TableauApi
                     
                     tableau.Values.Where(y => y.Key.EndsWith($"-{x.Position}")).ToList().ForEach(z =>
                         {
-                            tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">";
-                            tableauHtml += $"{z.Value.ValueString}";
+                            string tableauHtmlCelulleContent = $"{z.Value.ValueString}";
+
+                            if (!string.IsNullOrEmpty(z.Value.TableauLinkUrl))
+                            {
+                                tableauHtmlCelulleContent = $"<a href=\"{z.Value.TableauLinkUrl}\"/>{tableauHtmlCelulleContent}</a>";
+                            }
+
+                            tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">{tableauHtmlCelulleContent}</td>";
                         });
 
                     tableauHtml += $"</tr>";

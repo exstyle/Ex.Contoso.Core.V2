@@ -26,47 +26,7 @@ namespace CSharp.Test.TableauApi
         {
             return tableau.Lignes.Where(x => x.NomLigne == nameLine).Skip(position).FirstOrDefault();
         }
-
-        /// <summary>
-        /// Méthode permettant d'ajouter une ligne
-        /// </summary>
-        /// <param name="tableau">Tableau de référence pour ajouter une ligne</param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static Ligne AddLigne(this Tableau tableau, string name, int? indentation = null)
-        {
-            if (tableau.Lignes == null)
-                tableau.Lignes = new List<Ligne>();
-
-            Ligne ligne = new Ligne(name);
-            ligne.Position = tableau.Lignes.Count;
-            ligne.Indentation = indentation ?? 0;
-            ligne.Tableau = tableau;
-            tableau.Lignes.Add(ligne);
-
-            return ligne;
-
-        }
-
-        /// <summary>
-        /// Méthode permettant d'ajouter une ligne au même niveau que la ligne de référence
-        /// </summary>
-        /// <param name="ligne">Ligne de reference pour ajouter une ligne sibling</param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static Ligne AddLigne(this Ligne ligne, string name)
-        {
-            Ligne currentLigne = new Ligne(name);
-            currentLigne.Position = ligne.Position + 1;
-            currentLigne.Indentation = ligne.Indentation;
-            currentLigne.Tableau = ligne.Tableau;
-            ligne.Tableau.Lignes.Add(currentLigne);
-
-            return currentLigne;
-
-        }
-
-
+        
         /// <summary>
         /// Méthode permettant d'ajouter une ligne enfant au tableu courant (ne devrait pas servir)
         /// </summary>
@@ -153,112 +113,58 @@ namespace CSharp.Test.TableauApi
 
         }
 
-
         /// <summary>
-        /// Méthode permettant d'ajouter une ligne enfant au tableu courant (ne devrait pas servir)
+        /// 
         /// </summary>
         /// <param name="tableau"></param>
         /// <param name="name"></param>
+        /// <param name="position"></param>
         /// <returns></returns>
-        public static Ligne AddChildLigne(this Tableau tableau, string name)
+        public static Ligne NewLineTitle(this Tableau tableau, string name, int position = 0)
         {
-            Ligne ligne = new Ligne(name);
-            var last = tableau.Lignes.Last();
-            ligne.Position = last.Position + 1;
-            ligne.Indentation = last.Indentation + 1;
-            ligne.Tableau = tableau;
-            tableau.Lignes.Add(ligne);
-
-            return ligne;
-
-        }
-
-        /// <summary>
-        /// Méthode permettant d'ajouter une ligne enfant à la ligne courante
-        /// </summary>
-        /// <param name="ligne"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static Ligne AddChildLigne(this Ligne ligne, string name)
-        {
-            Ligne currentLigne = new Ligne(name);
-            currentLigne.Tableau = ligne.Tableau;
-            currentLigne.Position = ligne.Position + 1;
-            currentLigne.Indentation = ligne.Indentation + 1;
-            ligne.Tableau.Lignes.Add(currentLigne);
-
-            return currentLigne;
-
-        }
-
-        public static Ligne AddLigneTitre1(this Tableau tableau, string name, int position = 0)
-        {
-            return tableau.AddLigne(name).
+            return tableau.NewLine(name).
                 ResetLigne().
                 SetLigneClass("h3").
                 SetIndentation(position);
         }
 
-        public static Ligne AddLigneTitre2(this Tableau tableau, string name, int indentation = 1)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ligne"></param>
+        /// <param name="name"></param>
+        /// <param name="indentation"></param>
+        /// <returns></returns>
+        public static Ligne NewLineTitle(this Ligne ligne, string name, int indentation = 0)
         {
-            return tableau.AddLigne(name)
-                .ResetLigne()
-                .SetLigneClass("h4")
-                .SetIndentation(indentation);
-        }
-
-        public static Ligne AddLigneTitre3(this Tableau tableau, string name, int indentation = 2)
-        {
-            return tableau.AddLigne(name)
-                .ResetLigne()
-                .SetLigneClass("h5")
-                .SetIndentation(indentation);
-        }
-
-        public static Ligne AddLigneTitre4(this Tableau tableau, string name, int indentation = 3)
-        {
-            return tableau.AddLigne(name)
-                .ResetLigne()
-                .SetLigneClass("h6")
-                .SetIndentation(indentation);
-        }
-
-        public static Ligne AddLigneTitre1(this Ligne ligne, string name, int indentation = 0)
-        {
-            return ligne.AddLigne(name)
+            return ligne.NewLine(name)
                 .ResetLigne()
                 .SetLigneClass("h3")
                 .SetIndentation(indentation);
         }
 
-        public static Ligne AddLigneTitre2(this Ligne ligne, string name, int indentation = 1)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ligne"></param>
+        /// <param name="name"></param>
+        /// <param name="indentation"></param>
+        /// <returns></returns>
+        public static Ligne NewChildLineTitle(this Ligne ligne, string name, int indentation = 1)
         {
-            ligne.AddLigne(name)
+            ligne.NewChildLine(name)
                 .SetLigneClass("h4")
                 .ResetLigne()
                 .SetIndentation(indentation);
             return ligne;
         }
 
-        public static Ligne AddLigneTitre3(this Ligne ligne, string name, int indentation = 2)
-        {
-            ligne.AddLigne(name)
-                .ResetLigne()
-                .SetLigneClass("h5")
-                .SetIndentation(indentation);
-            return ligne;
-        }
-
-        public static Ligne AddLigneTitre4(this Ligne ligne, string name, int indentation = 3)
-        {
-            ligne
-                .AddLigne(name)
-                .ResetLigne()
-                .SetLigneClass("h6")
-                .SetIndentation(indentation);
-            return ligne;
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ligne"></param>
+        /// <param name="indentation"></param>
+        /// <returns></returns>
         public static Ligne SetIndentation(this Ligne ligne, int indentation)
         {
             ligne.Indentation = indentation;

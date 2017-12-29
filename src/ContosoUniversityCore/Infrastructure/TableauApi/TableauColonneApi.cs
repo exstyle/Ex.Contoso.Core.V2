@@ -71,7 +71,7 @@ namespace CSharp.Test.TableauApi
         }
 
         /// <summary>
-        /// Méthode permettant d'ajouter une class à la colonne (th)
+        /// Méthode permettant d'indiquer colonne classe (th)
         /// </summary>
         /// <param name="colonne"></param>
         /// <param name="style"></param>
@@ -79,6 +79,18 @@ namespace CSharp.Test.TableauApi
         public static Colonne SetColonneClass(this Colonne colonne, string style)
         {
             colonne.ColonneClass = style;
+            return colonne;
+        }
+
+        /// <summary>
+        /// Méthode permettant d'ajouter une class à la colonne (th) (garde l'existant)
+        /// </summary>
+        /// <param name="colonne"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static Colonne AddColonneClass(this Colonne colonne, string style)
+        {
+            colonne.ColonneClass += $" {style}";
             return colonne;
         }
 

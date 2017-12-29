@@ -27,8 +27,9 @@ namespace CSharp.Test.TableauApi
 
             Tableau.SetTitle("Tableau Simple")
                 .SetDefaultValue("-")
-                .SetFormat(EnumFormat.Marge)
-                .SetTableauCelluleClass("text-center");
+                .SetFormat(EnumFormat.Energie)
+                .SetTableauCelluleClass("text-center")
+                .AddTableauClass("table-bordered table-inverse table-striped table-dark");
 
             Tableau.AddColonne()
                 .AddColonne(TableauRes.Tableau1ColonneTotal)
@@ -38,13 +39,14 @@ namespace CSharp.Test.TableauApi
                 .AddColonne(TableauRes.Tableau1ColonneTeleReleve)
                 .AddColonne(TableauRes.Tableau1ColonneProfile);
 
-            Tableau.NewLine("Marges")
+            Tableau.NewLineTitle("Marges")
                     .NewChildLine(TableauRes.LMargeBrute).SetDefaultValue("1000")
                     .NewChildLine(TableauRes.LMargeBruteSem1).SetDefaultValue("1300")
                     .NewChildLine(TableauRes.LMargeBruteSem2)
                     .NewChildLine(TableauRes.LMargeBruteSem3)
-                .NewLine(TableauRes.LMargeBruteSansTacite)
-                    .NewChildLine(TableauRes.LMargeExtreme)
+                .NewLineTitle(TableauRes.LMargeBruteSansTacite)
+                    .NewChildLineTitle(TableauRes.LMargeExtreme)
+                      .NewGrandChildrenLine(TableauRes.LMargeExtremeSem1)
                       .NewGrandChildrenLine(TableauRes.LMargeExtremeSem1)
                     .NewChildLine(TableauRes.LMargeExtremeSem2)
                     .NewChildLine(TableauRes.LMargeExtremeSem3)
@@ -104,7 +106,7 @@ namespace CSharp.Test.TableauApi
             //        .AddChildLigne(TableauRes.LMargeExtremeSem6Lundi);
 
             Tableau.Generate();
-            //GetResultats1();
+            GetResultats1();
         }
 
         public void GetResultats1()
@@ -121,7 +123,8 @@ namespace CSharp.Test.TableauApi
             foreach (var item in query)
             {
                 Tableau.Value(TableauRes.Tableau1ColonneElec, item.Item1).
-                    SetValeur(item.Item2);
+                    SetValeur(item.Item2)
+                    .SetLink("Course");
                 //SetConditionalClass("success", "", x => x.Value > 10);
             }
         }
