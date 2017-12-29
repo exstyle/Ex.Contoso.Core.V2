@@ -95,6 +95,42 @@ namespace CSharp.Test.TableauApi
         }
 
         /// <summary>
+        /// Méthode permettant d'indiquer colonne classe (th)
+        /// </summary>
+        /// <param name="colonne"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static Colonne SetColonneCelulleClass(this Colonne colonne, string style)
+        {
+            colonne.ColonneCelluleClass = style;
+            return colonne;
+        }
+
+        /// <summary>
+        /// Méthode permettant d'ajouter une class à la colonne (th) (garde l'existant)
+        /// </summary>
+        /// <param name="colonne"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static Colonne AddColonneCelulleClass(this Colonne colonne, string style)
+        {
+            colonne.ColonneCelluleClass += $" {style}";
+            return colonne;
+        }
+
+        /// <summary>
+        /// Méthode permettant d'ajouter une class à la colonne (th) (garde l'existant)
+        /// </summary>
+        /// <param name="colonne"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static Colonne AddColonneCelluleClass(this Colonne colonne, string style)
+        {
+            colonne.ColonneClass += $" {style}";
+            return colonne;
+        }
+
+        /// <summary>
         /// Méthode permetttant d'ajouter une classe à toutes les celulles de la colonne
         /// </summary>
         /// <param name="colonne"></param>
@@ -102,7 +138,7 @@ namespace CSharp.Test.TableauApi
         /// <returns></returns>
         public static Colonne SetColonneCellulesClass(this Colonne colonne, string style)
         {
-            colonne.ColonneCelluleClass = style;
+            colonne.ColonneCellulesClass = style;
             return colonne;
         }
         

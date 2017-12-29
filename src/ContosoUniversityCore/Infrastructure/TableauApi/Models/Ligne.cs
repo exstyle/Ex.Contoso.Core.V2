@@ -20,7 +20,9 @@ namespace CSharp.Test.TableauApi.Models
 
         public string LigneClass { get; set; }
 
-        public string LigneCelluleClass { get; set; }
+        public string LigneCelulleClass { get; set; }
+
+        public string LigneCellulesClass { get; set; }
 
         public Tableau Tableau { get; set; }
 

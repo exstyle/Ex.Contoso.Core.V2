@@ -111,6 +111,18 @@ namespace CSharp.Test.TableauApi
         /// <param name="tableau"></param>
         /// <param name="style"></param>
         /// <returns></returns>
+        public static Tableau AddTHeadClass(this Tableau tableau, string style)
+        {
+            tableau.THeadClass += $" {style}";
+            return tableau;
+        }
+
+        /// <summary>
+        /// Méthode permettant de déclarer une class
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
         public static Tableau SetTBodyClass(this Tableau tableau, string style)
         {
             tableau.TBodyClass = style;
@@ -174,7 +186,7 @@ namespace CSharp.Test.TableauApi
                         Symbole = ligne.Symbole,
                         Format = format,
                         DefaultValue = defaultValue,
-                        CelluleClass = ligne.LigneCelluleClass ?? colonne.ColonneCelluleClass ?? tableau.TableauCelluleClass
+                        CelluleClass = ligne.LigneCellulesClass ?? colonne.ColonneCellulesClass ?? tableau.TableauCelluleClass
                     };
 
                 }
@@ -230,7 +242,12 @@ namespace CSharp.Test.TableauApi
                                                         val.Colonne.ClassTrue :
                                                         val.Colonne.ClassFalse;
                     }
-
+                    else if (tableau.CelulleClassPredicate != null)
+                    {
+                        val.CelluleClass = tableau.CelulleClassPredicate(doubleValue) ?
+                                                        tableau.ClassTrue :
+                                                        tableau.ClassFalse;
+                    }
                 }
 
                 // Value
@@ -278,7 +295,7 @@ namespace CSharp.Test.TableauApi
             tableauHtml += $"<thead class=\"{tableau.THeadClass}\">";
             tableauHtml += $"<tr>";
             tableau.Colonnes.ForEach(x =>
-                tableauHtml += $"<th class=\"{x.ColonneClass}\">{x.NomColonne}</th>"
+                tableauHtml += $"<th class=\"{x.ColonneClass}\"><strong>{x.NomColonne}</strong></th>"
             );
 
             tableauHtml += $"</tr>";
@@ -286,7 +303,7 @@ namespace CSharp.Test.TableauApi
             tableauHtml += $"<tbody class=\"{tableau.TBodyClass}\">";
             tableau.Lignes.ForEach(x =>
                 {   
-                    tableauHtml += $"<tr><td class=\"{x.LigneClass}\">{x.NomLigne}</td>";
+                    tableauHtml += $"<tr class=\"{x.LigneClass}\"><td class=\"{x.LigneCelulleClass}\">{x.NomLigne}</td>";
                     
                     tableau.Values.Where(y => y.Key.EndsWith($"-{x.Position}")).ToList().ForEach(z =>
                         {
@@ -294,7 +311,7 @@ namespace CSharp.Test.TableauApi
 
                             if (!string.IsNullOrEmpty(z.Value.TableauLinkUrl))
                             {
-                                tableauHtmlCelulleContent = $"<a href=\"{z.Value.TableauLinkUrl}\"/>{tableauHtmlCelulleContent}</a>";
+                                tableauHtmlCelulleContent = $"<a href=\"{z.Value.TableauLinkUrl}\" style=\"color:#0088cc\"/>{tableauHtmlCelulleContent}</a>";
                             }
 
                             tableauHtml += $"<td class=\"{z.Value.CelluleClass}\">{tableauHtmlCelulleContent}</td>";

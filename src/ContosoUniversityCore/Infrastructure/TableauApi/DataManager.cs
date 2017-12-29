@@ -26,25 +26,28 @@ namespace CSharp.Test.TableauApi
         {
 
             Tableau.SetTitle("Tableau Simple")
-                .SetDefaultValue("-")
-                .SetFormat(EnumFormat.Energie)
-                .SetTableauCelluleClass("text-center")
-                .AddTableauClass("table-bordered table-inverse table-striped table-dark");
+                .SetDefaultValue("0")
+                .SetFormat(EnumFormat.Marge)
+                .SetTableauCelluleClass("text-right")
+                .AddTableauClass("table-bordered table-striped w-auto")
+                .SetTHeadClass("blue-grey lighten-1")
+                .SetCelulleConditionalClass("table-warning", "", (w) => w == 1);
 
             Tableau.AddColonne()
                 .AddColonne(TableauRes.Tableau1ColonneTotal)
                 .AddColonne(TableauRes.Tableau1ColonneGaz)
                 .AddColonne(TableauRes.Tableau1ColonneElec)
-                .AddColonne(TableauRes.Tableau1ColonneAutre)
                 .AddColonne(TableauRes.Tableau1ColonneTeleReleve)
+                .AddColonne(TableauRes.Tableau1ColonneAutre)
                 .AddColonne(TableauRes.Tableau1ColonneProfile);
 
-            Tableau.NewLineTitle("Marges")
+            Tableau.NewLineTitle("Marges").AddLigneClass("blue-grey lighten-3")
                     .NewChildLine(TableauRes.LMargeBrute).SetDefaultValue("1000")
                     .NewChildLine(TableauRes.LMargeBruteSem1).SetDefaultValue("1300")
                     .NewChildLine(TableauRes.LMargeBruteSem2)
                     .NewChildLine(TableauRes.LMargeBruteSem3)
-                .NewLineTitle(TableauRes.LMargeBruteSansTacite)
+                .NewEmptyLine()
+                .NewLineTitle(TableauRes.LMargeBruteSansTacite).AddLigneClass("blue-grey lighten-3")
                     .NewChildLineTitle(TableauRes.LMargeExtreme)
                       .NewGrandChildrenLine(TableauRes.LMargeExtremeSem1)
                       .NewGrandChildrenLine(TableauRes.LMargeExtremeSem1)

@@ -22,6 +22,8 @@ namespace CSharp.Test.TableauApi.Models
 
         public string ColonneCelluleClass { get; set; }
 
+        public string ColonneCellulesClass { get; set; }
+
         public EnumFormat Format { get; set; }
 
         public Func<double, bool> CelulleClassPredicate { get; set; }

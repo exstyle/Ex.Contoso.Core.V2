@@ -76,6 +76,27 @@ namespace CSharp.Test.TableauApi
         /// <param name="tableau"></param>
         /// <param name="name"></param>
         /// <returns></returns>
+        public static Ligne NewEmptyLine(this Ligne ligne)
+        {
+            Ligne newLigne = new Ligne("")
+            {
+                Position = ligne.Position + 1,
+                Indentation = 1,
+                DefaultValue = "",
+                Tableau = ligne.Tableau
+            };
+            ligne.Tableau.Lignes.Add(newLigne);
+
+            return newLigne;
+
+        }
+
+        /// <summary>
+        /// Méthode permettant d'ajouter une ligne enfant au tableu courant (ne devrait pas servir)
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static Ligne NewChildLine(this Ligne ligne, string name)
         {
 
@@ -124,7 +145,7 @@ namespace CSharp.Test.TableauApi
         {
             return tableau.NewLine(name).
                 ResetLigne().
-                SetLigneClass("h3").
+                SetLigneClass("h4").
                 SetIndentation(position);
         }
 
@@ -139,7 +160,7 @@ namespace CSharp.Test.TableauApi
         {
             return ligne.NewLine(name)
                 .ResetLigne()
-                .SetLigneClass("h3")
+                .SetLigneClass("h4")
                 .SetIndentation(indentation);
         }
 
@@ -153,7 +174,7 @@ namespace CSharp.Test.TableauApi
         public static Ligne NewChildLineTitle(this Ligne ligne, string name, int indentation = 1)
         {
             ligne.NewChildLine(name)
-                .SetLigneClass("h4")
+                .SetLigneClass("h5")
                 .ResetLigne()
                 .SetIndentation(indentation);
             return ligne;
@@ -230,6 +251,12 @@ namespace CSharp.Test.TableauApi
             return ligne;
         }
 
+        public static Ligne AddLigneClass(this Ligne ligne, string style)
+        {
+            ligne.LigneClass += $" {style}";
+            return ligne;
+        }
+
         /// <summary>
         /// Méthode permettant de donner une classe aux cellules appartenant à cette ligne
         /// </summary>
@@ -238,7 +265,7 @@ namespace CSharp.Test.TableauApi
         /// <returns></returns>
         public static Ligne SetLigneCellulesClass(this Ligne ligne, string style)
         {
-            ligne.LigneCelluleClass = style;
+            ligne.LigneCellulesClass = style;
             return ligne;
         }
 
