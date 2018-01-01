@@ -51,13 +51,14 @@
                     .OrderBy(d => d.Id)
                     .ProjectToListAsync<Result.Course>();
 
-                var tableauS = new DataManager();
-                var test = tableauS.Tableau;
+                var tableauS = new DataManager("Tableau 1 - Année 2016");
+                var tableauX = new DataManager("Tableau 2 - Actualisé 2017");
+                
                 return new Result
                 {
                     Courses = courses,
                     SelectedDepartment = message.SelectedDepartment,
-                    TableauSynthese = new HtmlString(test.Render())
+                    TableauSynthese = new HtmlString(tableauS.Tableau.Render() + tableauX.Tableau.Render())
                 };
             }
         }

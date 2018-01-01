@@ -20,18 +20,19 @@ namespace CSharp.Test.TableauApi
 
     public class DataManager
     {
+        
         public Tableau Tableau { get; set; } = new Tableau();
 
-        public DataManager()
+        public DataManager(string titre = "Tableau sur les marges")
         {
 
-            Tableau.SetTitle("Tableau Simple")
+            Tableau.SetTitle(titre)
                 .SetDefaultValue("0")
                 .SetFormat(EnumFormat.Marge)
                 .SetTableauCelluleClass("text-right")
                 .AddTableauClass("table-bordered table-striped w-auto")
                 .SetTHeadClass("blue-grey lighten-1")
-                .SetCelulleConditionalClass("table-warning", "", (w) => w == 1);
+                .AddCelulleConditionalClass("table-warning", "", (w) => w == 1);
 
             Tableau.AddColonne()
                 .AddColonne(TableauRes.Tableau1ColonneTotal)
@@ -58,56 +59,6 @@ namespace CSharp.Test.TableauApi
                     .NewChildLine(TableauRes.LMargeExtremeSem6)
                         .NewGrandChildrenLine(TableauRes.LMargeExtremeSem6Lundi);
             
-            //Tableau.AddLigneTitre1("Marges")
-            //        .AddLigne(TableauRes.LMargeBrute).SetDefaultValue("1000")
-            //        .AddLigne(TableauRes.LMargeBruteSem1).SetDefaultValue("1300")
-            //        .AddLigne(TableauRes.LMargeBruteSem2)
-            //        .AddLigne(TableauRes.LMargeBruteSem3);
-
-            //Tableau.AddLigne(TableauRes.LMargeBruteSansTacite, 1);
-            //Tableau.AddLigne(TableauRes.LMargeExtreme, 1)
-            //    .AddChildLigne(TableauRes.LMargeExtremeSem1)
-            //    .AddLigne(TableauRes.LMargeExtremeSem2)
-            //    .AddLigne(TableauRes.LMargeExtremeSem3)
-            //    .AddLigne(TableauRes.LMargeExtremeSem4)
-            //    .AddLigne(TableauRes.LMargeExtremeSem5)
-            //    .AddLigneTitre3(TableauRes.LMargeExtremeSem6)
-            //        .AddLigne(TableauRes.LMargeExtremeSem6Lundi);
-
-            //Tableau.SetTitle("Mon premier tableau")
-            //    .SetFormat(EnumFormat.Marge)
-            //    .SetDefaultValue("1")
-            //    .SetCelulleConditionalClass("warning", "", (x) => x < 10)
-            //    .SetTableauClass("table table-sm table-dark table-hover");
-
-            //Tableau.AddColonne()
-            //    .AddColonne(TableauRes.Tableau1ColonneTotal)
-            //    .AddColonne(TableauRes.Tableau1ColonneGaz)
-            //        .SetCelullueDefaultValue("10")
-            //        .SetCelullueConditionalClass("success", "", (x) => x > 10)
-            //    .AddColonne(TableauRes.Tableau1ColonneElec)
-            //        .SetCelullueConditionalClass("danger", "", (x) => x <= 1200)
-            //        .SetColonneClass("sucess")
-            //    .AddColonne(TableauRes.Tableau1ColonneAutre)
-            //    .AddColonne(TableauRes.Tableau1ColonneTeleReleve)
-            //    .AddColonne(TableauRes.Tableau1ColonneProfile);
-
-            //Tableau.AddLigneTitre1("Marges")
-            //    .AddChildLigne(TableauRes.LMargeBrute).SetDefaultValue("1000")
-            //        .AddChildLigne(TableauRes.LMargeBruteSem1).SetDefaultValue("1300")
-            //        .AddLigne(TableauRes.LMargeBruteSem2)
-            //        .AddLigne(TableauRes.LMargeBruteSem3);
-
-            //Tableau.AddLigne(TableauRes.LMargeBruteSansTacite, 1);
-            //Tableau.AddLigne(TableauRes.LMargeExtreme, 1)
-            //    .AddChildLigne(TableauRes.LMargeExtremeSem1)
-            //    .AddLigne(TableauRes.LMargeExtremeSem2)
-            //    .AddLigne(TableauRes.LMargeExtremeSem3)
-            //    .AddLigne(TableauRes.LMargeExtremeSem4)
-            //    .AddLigne(TableauRes.LMargeExtremeSem5)
-            //    .AddLigneTitre3(TableauRes.LMargeExtremeSem6)
-            //        .AddChildLigne(TableauRes.LMargeExtremeSem6Lundi);
-
             Tableau.Generate();
             GetResultats1();
         }
@@ -123,6 +74,12 @@ namespace CSharp.Test.TableauApi
 
             Dictionary<string, TableauValeur> test = new Dictionary<string, TableauValeur>();
 
+            List<TableauValeur> data = new List<TableauValeur>();
+            
+            Tableau.Value(TableauRes.Tableau1ColonneAutre, TableauRes.LMargeBruteSem1)
+                .SetValeur(32)
+                .SetSymbole("£");
+            
             foreach (var item in query)
             {
                 Tableau.Value(TableauRes.Tableau1ColonneElec, item.Item1).
@@ -130,6 +87,8 @@ namespace CSharp.Test.TableauApi
                     .SetLink("Course");
                 //SetConditionalClass("success", "", x => x.Value > 10);
             }
+
+
         }
 
     }

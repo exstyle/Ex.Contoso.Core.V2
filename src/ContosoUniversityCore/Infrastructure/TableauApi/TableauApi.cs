@@ -152,6 +152,27 @@ namespace CSharp.Test.TableauApi
         }
 
         /// <summary>
+        /// Méthode permettant de mettre une classe où une autre sous condition
+        /// S'ajoute a ce qui a déjà été déclaré pour les cellules au niveau taleau
+        /// </summary>
+        /// <param name="tableau"></param>
+        /// <param name="classTrue"></param>
+        /// <param name="classFalse"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public static Tableau AddCelulleConditionalClass(this Tableau tableau,
+                string classTrue,
+                string classFalse,
+                Func<double, bool> predicate)
+        {
+            tableau.ClassTrue = $"{tableau.TableauCelluleClass} {classTrue}";
+            tableau.ClassFalse = $"{tableau.TableauCelluleClass} {classFalse}";
+            tableau.CelulleClassPredicate = predicate;
+
+            return tableau;
+        }
+
+        /// <summary>
         ///  Gérer les valeurs par défaut ici
         /// </summary>
         /// <param name="tableau"></param>
@@ -201,7 +222,7 @@ namespace CSharp.Test.TableauApi
         /// <param name="height"></param>
         /// <param name="width"></param>
         /// <returns></returns>
-        public static string Render(this Tableau tableau, int height = 0, int width=500)
+        public static string Render(this Tableau tableau, int height = 0, int width=0)
         {
             PreparteTableData(tableau);
             return ToHtml(tableau, height, width);
@@ -284,12 +305,13 @@ namespace CSharp.Test.TableauApi
         /// <param name="height"></param>
         /// <param name="width"></param>
         /// <returns></returns>
-        public static string ToHtml(this Tableau tableau, int height = 0, int width = 500)
+        public static string ToHtml(this Tableau tableau, int height = 0, int width = 0)
         {
-            var style = height == 0 ? "" : $"height: {height}px; overflow: auto;";
-            string tableauHtml = $"<div class=\"card mb-3\">";
+            var styleHeight = height == 0 ? "" : $"height: {height}px; overflow: auto;";
+            var styleWidth = width == 0 ? "" : $"width:{width}px";
+            string tableauHtml = $"<div class=\"card mb-3\" style=\"{styleWidth}\">";
             tableauHtml += $"<p class=\"card-header red white-text small-header\">{ tableau.Title}</p>";
-            tableauHtml += $"<div class=\"card-body\" style=\"{style}\">";
+            tableauHtml += $"<div class=\"card-body\" style=\"{styleHeight}\">";
             tableauHtml += $"<table class=\"{tableau.TClass}\">";
 
             tableauHtml += $"<thead class=\"{tableau.THeadClass}\">";
@@ -303,7 +325,7 @@ namespace CSharp.Test.TableauApi
             tableauHtml += $"<tbody class=\"{tableau.TBodyClass}\">";
             tableau.Lignes.ForEach(x =>
                 {   
-                    tableauHtml += $"<tr class=\"{x.LigneClass}\"><td class=\"{x.LigneCelulleClass}\">{x.NomLigne}</td>";
+                    tableauHtml += $"<tr class=\"{x.LigneClass}\"><td class=\"{x.LigneCelulleClass}\"><strong>{x.NomLigne}</strong></td>";
                     
                     tableau.Values.Where(y => y.Key.EndsWith($"-{x.Position}")).ToList().ForEach(z =>
                         {
@@ -323,6 +345,8 @@ namespace CSharp.Test.TableauApi
 
             tableauHtml += $"</tbody>";
             tableauHtml += $"</table>";
+            tableauHtml += $"</div>";
+            tableauHtml += $"</div>";
 
             return tableauHtml;
         }

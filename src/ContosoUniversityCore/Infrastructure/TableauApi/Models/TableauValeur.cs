@@ -18,6 +18,12 @@ namespace CSharp.Test.TableauApi.Models
             Ligne = ligne;
         }
 
+        public TableauValeur(string colonne, string ligne)
+        {
+            ColonneString = colonne;
+            LigneString = ligne;
+        }
+
         public TableauValeur(Colonne colonne, Ligne ligne, double? value)
         {
             Colonne = colonne;
@@ -25,9 +31,22 @@ namespace CSharp.Test.TableauApi.Models
             Value = value;
         }
 
+        public TableauValeur(string colonne, string ligne, double? value)
+        {
+            ColonneString = colonne;
+            LigneString = ligne;
+            Value = value;
+        }
+
         public Colonne Colonne { get; set; }
 
         public Ligne Ligne { get; set; }
+
+
+        public string ColonneString { get; set; }
+
+        public string LigneString { get; set; }
+
 
         public double? Value { get; set; }
 
